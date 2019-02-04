@@ -15,3 +15,11 @@
 ++
 a ++ b
 "test1"
+"te\nst2"
+"te
+st3"
+"te
+po
+op
+
+st4"

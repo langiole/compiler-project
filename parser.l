@@ -13,17 +13,19 @@ underscore		_
 double_quote 		\"
 id			{letter}({letter}|{digit}|{underscore})*
 INTEGER_LITERAL 	({digit})*{digit}
-STRING_LITERAL		{double_quote}.*{double_quote}
+STRING_LITERAL		{double_quote}[^\"\n]*{double_quote}
+ERR_STRING_LITERAL 	{double_quote}[^\"]*{double_quote}
 op 			(&&)|(\|\|)|(<)|(>)|(<=)|(>=)|(==)|(!=)|(\+)|(-)|(\*)|(\/)
 
 %%
 {id}			{ printf("Line %d:\tid found\t\t\t%s\n", yylineno, yytext); }
 {INTEGER_LITERAL}	{ printf("Line %d:\tINTEGER_LITERAL found\t\t%s\n", yylineno, yytext); }
 {STRING_LITERAL} 	{ printf("Line %d:\tSTRING_LITERAL found\t\t%s\n", yylineno, yytext); }
+{ERR_STRING_LITERAL} 	{ printf("Syntax errors in line %d\n", yylineno); }
 {op} 			{ printf("Line %d:\top found\t\t\t%s\n", yylineno, yytext); }
 \+\+ 			{ printf("Syntax errors in line %d\n", yylineno); }
 \n 			{ }
-.			;
+.			{ printf("Unmatched: %s\n", yytext); }
 %%
 
 int yywrap(void) { return 1; }
