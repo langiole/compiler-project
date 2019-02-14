@@ -95,3 +95,27 @@ FormalRest :, Type id
    ExpList : Exp ExpRest*
            :
   ExpRest  :  ,Exp
+
+
+**************
+** keywords **
+**************
+- class
+- public
+- static
+- void
+- main
+- String
+- extends
+- return
+- int
+- boolean
+- if
+- else
+- while
+- System.out.println
+- length
+- true
+- false
+- this
+- new
