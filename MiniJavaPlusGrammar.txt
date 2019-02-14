@@ -97,9 +97,9 @@ FormalRest :, Type id
   ExpRest  :  ,Exp
 
 
-**************
-** keywords **
-**************
+************
+* KEYWORDS *
+************
 - class
 - public
 - static
