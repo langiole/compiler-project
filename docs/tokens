@@ -1,0 +1,10 @@
+id: An identifier is a sequence of letters, digits, and underscores,
+starting with a letter. Uppercase letters are distinguished from lowercase. 
+In this specification, the symbol id stands for an identifier.
+
+INTEGER_LITERAL: An integer constant.
+
+STRING_LITERAL: A quoted string, e.g. "hello world". Should also except the escape sequence \".
+
+op: A binary operator is one of && || < >  <= >= == != + - * /
+

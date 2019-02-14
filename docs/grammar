@@ -1,0 +1,44 @@
+  Program  : MainClass ClassDecl*
+ MainClass : class id { public static void main ( String [] id )
+               { Statement }}
+ ClassDecl : class id { VarDecl* MethodDecl* }
+           : class id extends id { VarDecl* MethodDecl* }
+   VarDecl : Type id ;
+MethodDecl : public Type id ( FormalList )
+               { VarDecl* Statement* return Exp ;}
+FormalList : Type id FormalRest*
+           :
+FormalRest :, Type id
+      Type : int
+           : boolean
+           : id
+           : Type [ ]
+ Statement : { Statement* }
+           : if ( Exp ) Statement else Statement
+           : while ( Exp ) Statement
+           : System.out.println ( Exp ) ;
+           : System.out.println ( STRING_LITERAL ) ;
+           : id = Exp ;
+           : id Index = Exp ;
+    Index  : [ Exp ]
+           : Index [Exp]
+       Exp : Exp op Exp
+           : ! Exp
+           : + Exp       
+           : - Exp
+           : ( Exp )
+           : id Index
+           : id . length
+           : id Index . length
+           : INTEGER_LITERAL
+           : true
+           : false
+           : Object
+           : Object . id ( ExpList )
+  Object   : id
+           : this
+           : new id ()
+           : new Type Index
+   ExpList : Exp ExpRest*
+           :
+  ExpRest  :  ,Exp
