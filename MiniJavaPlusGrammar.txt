@@ -1,4 +1,4 @@
-﻿            MiniJava+ Lexical and Syntax Forms
+            MiniJava+ Lexical and Syntax Forms
 
 
 MiniJava+ is a subset of Java. The meaning of a MiniJava+ program is given 
@@ -72,7 +72,7 @@ FormalRest :, Type id
            : System.out.println ( Exp ) ;
            : System.out.println ( STRING_LITERAL ) ;
            : id = Exp ;
-           : id [ Exp ] = Exp ;
+           : id Index = Exp ;
     Index  : [ Exp ]
            : Index [Exp]
        Exp : Exp op Exp
@@ -81,8 +81,8 @@ FormalRest :, Type id
            : - Exp
            : ( Exp )
            : id Index
-           : id . Length
-           : id Index . Length
+           : id . length
+           : id Index . length
            : INTEGER_LITERAL
            : true
            : false
@@ -95,25 +95,3 @@ FormalRest :, Type id
    ExpList : Exp ExpRest*
            :
   ExpRest  :  ,Exp
-
-*******************************
-*  APPENDIX  A Sample Program *
-*******************************
-
-class Factorial {
-    public static void main(String[] a) {
-        System.out.println("Factorial(10) is ");
-      System.out.println(new Fac().ComputeFac(10));
-    }
-}
-class Fac {
-    public int ComputeFac(int num) {
-        int num_aux;
-        if (num < 1)
-            num_aux = 1;
-        else
-            num_aux = num * (this.ComputeFac(num-1));
-        return num_aux;
-    }
-}
-
