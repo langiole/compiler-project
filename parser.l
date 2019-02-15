@@ -1,6 +1,7 @@
 %{
 	#include <stdio.h>
 	#include "y.tab.h"	
+	#define PRINTDEBUG(x) fprintf(stderr, "\n%s\n", (x));
 %}
 %option yylineno
 
@@ -12,8 +13,8 @@ NoQuoteDashNl 		[^\"\\\n]
 id			{letter}({letter}|{digit}|_)*
 INTEGER_LITERAL 	({digit})*{digit}
 STRING_LITERAL		\"(\\.|{NoQuoteDashNl})*\"
-op 			(&&)|(\|\|)|(<)|(>)|(<=)|(>=)|(==)|(!=)|(\*)|(\/)
-single_char 		[+\-!{}[\]();,=.]
+op 			(&&)|(\|\|)|(<=)|(>=)|(==)|(!=)
+single_char 		[+\-!{}[\]();,=.<>*/]
 sl_comment 		(\/\/)
 ml_comment 		(\/\*)({NoStar}|\*+{NoStarDash})*\*+\/
 SYNTAX_ERR 		(\+\+)|(--)
@@ -43,7 +44,7 @@ SYNTAX_ERR 		(\+\+)|(--)
 {INTEGER_LITERAL}	{ return INTEGER_LITERAL; }
 {STRING_LITERAL} 	{ return STRING_LITERAL; } 
 {op} 			{ return op; }
-{single_char} 		{ return yytext; }
+{single_char} 		{ return *yytext; }
 {sl_comment} 		{ }
 {ml_comment} 		{ }
 {SYNTAX_ERR} 	 	{ printf("Syntax errors in line %d\n", yylineno); }

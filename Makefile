@@ -1,5 +1,12 @@
+build: parser
+
+dbg: parser diagram
+
+diagram: parser
+	dot -Tpng y.dot > out.png
+
 parser:		y.tab.c lex.yy.c
-		gcc y.tab.c lex.yy.c -o parser
+		gcc -g y.tab.c lex.yy.c -o parser
 
 y.tab.c:	parser.y
 		yacc -d -g --verbose parser.y
