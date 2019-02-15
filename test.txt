@@ -1,4 +1,25 @@
+- class
+- public
+static
+void
+main
+String
+extends
+return
+int
+boolean
+if
+else
+while
+System.out.println
+length
+true
+false
+this
+new
 1idtest1
+for
+strin_lit
 123
 ""||
 &&
@@ -14,12 +35,20 @@
 /
 ++
 a ++ b
-"test1"
-"te\nst2"
-"te
-st3"
-"te
-po
-op
+"regex"
+"reg\nex"
+"reg
+ex"
+"r
+e
+g
 
-st4"
+ex"
+"reg"ex"
+"reg\"ex"
+"\"\"\"regex\"\""
+"\"\"\"regex\"\"
+
+/*test
+holy shit it erks *****/*/
+/** test**/*/
