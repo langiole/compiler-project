@@ -26,16 +26,24 @@ MainClass 	: CLASS id '{' PUBLIC STATIC VOID MAIN '(' STRING '[' ']' id ')' '{' 
 		;
 
 ClassDecl	: CLASS id '{' VarDeclList MethodDeclList '}'
-		| CLASS id '{' MethodDeclList '}'
 		| CLASS id EXTENDS id '{' VarDeclList MethodDeclList '}'
-		| CLASS id EXTENDS id '{' MethodDeclList '}'
 		;
 
 VarDeclList	: VarDeclList VarDecl
-		| VarDecl 
+		| 
 		;
 
-VarDecl		: Type id ';'
+VarDecl		: VDType id ';'
+		| id id ';'
+		;
+
+VDType		: VDTypePrime
+		| VDType '[' ']'
+		| id '[' ']'
+		;
+
+VDTypePrime	: INT
+		| BOOLEAN
 		;
 
 MethodDeclList	: MethodDeclList MethodDecl
@@ -43,8 +51,7 @@ MethodDeclList	: MethodDeclList MethodDecl
 		;
 
 MethodDecl	: PUBLIC Type id '(' FormalList ')' '{' VarDeclList StatementList RETURN Exp ';' '}'
-		| PUBLIC Type id '(' FormalList ')' '{' StatementList RETURN Exp ';' '}'
-		| PUBLIC Type id '(' FormalList ')' '{' RETURN Exp ';' '}'
+		| PUBLIC Type id '(' FormalList ')' '{' VarDeclList RETURN Exp ';' '}'
 		;
 
 FormalList	: Type id FormalRestList
@@ -124,7 +131,6 @@ ObjectPrime	: THIS
 		;
 
 ExpList		: Exp ExpRestList
-		|
 		;
 
 ExpRestList 	: ExpRestList ExpRest

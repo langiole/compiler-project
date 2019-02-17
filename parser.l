@@ -48,7 +48,7 @@ SYNTAX_ERR 		(\+\+)|(--)
 {sl_comment} 		{ }
 {ml_comment} 		{ }
 {SYNTAX_ERR} 	 	{ printf("Syntax errors in %d\n", yylineno); }
-[ \n\t] 		{ }
+[ \n\t\r] 		{ }
 .			{ printf("Syntax errors in %d\n", yylineno); }
 %%
 
