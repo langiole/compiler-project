@@ -1,7 +1,7 @@
 %{
 	#include <stdio.h>
 	#include "y.tab.h"	
-	#define PRINTDEBUG(x) fprintf(stderr, "\n%s\n", (x));
+	#define PRINTDEBUG(x, y) fprintf(stderr, "\nDBG: %s, lineno: %d\n", x,y);
 %}
 %option yylineno
 
@@ -15,7 +15,7 @@ INTEGER_LITERAL 	({digit})*{digit}
 STRING_LITERAL		\"(\\.|{NoQuoteDashNl})*\"
 op 			(&&)|(\|\|)|(<=)|(>=)|(==)|(!=)
 single_char 		[+\-!{}[\]();,=.<>*/]
-sl_comment 		(\/\/)
+sl_comment 		(\/\/.*)
 ml_comment 		(\/\*)({NoStar}|\*+{NoStarDash})*\*+\/
 SYNTAX_ERR 		(\+\+)|(--)
 
@@ -28,7 +28,7 @@ SYNTAX_ERR 		(\+\+)|(--)
 "main" 			{ return MAIN; }
 "String" 		{ return STRING; }
 "int" 			{ return INT; }
-"boolen" 		{ return BOOLEAN; }
+"boolean" 		{ return BOOLEAN; }
 "extends" 		{ return EXTENDS; }
 "return" 		{ return RETURN; }
 "if" 			{ return IF; }
@@ -47,9 +47,9 @@ SYNTAX_ERR 		(\+\+)|(--)
 {single_char} 		{ return *yytext; }
 {sl_comment} 		{ }
 {ml_comment} 		{ }
-{SYNTAX_ERR} 	 	{ printf("Syntax errors in line %d\n", yylineno); }
+{SYNTAX_ERR} 	 	{ printf("Syntax errors in %d\n", yylineno); }
 [ \n\t] 		{ }
-.			{ printf("Syntax errors in line %d\n", yylineno); }
+.			{ printf("Syntax errors in %d\n", yylineno); }
 %%
 
 int yywrap(void) { return 1; }

@@ -3,7 +3,8 @@
 	int yylex(void);
 	void yyerror(char *);
 	extern FILE *yyin;
-	extern int yy_flex_debug;
+	int yydebug=1;
+	extern int yylineno;
 %}
 
 %token id
@@ -25,11 +26,13 @@ MainClass 	: CLASS id '{' PUBLIC STATIC VOID MAIN '(' STRING '[' ']' id ')' '{' 
 		;
 
 ClassDecl	: CLASS id '{' VarDeclList MethodDeclList '}'
+		| CLASS id '{' MethodDeclList '}'
 		| CLASS id EXTENDS id '{' VarDeclList MethodDeclList '}'
+		| CLASS id EXTENDS id '{' MethodDeclList '}'
 		;
 
 VarDeclList	: VarDeclList VarDecl
-		|
+		| VarDecl 
 		;
 
 VarDecl		: Type id ';'
@@ -40,6 +43,8 @@ MethodDeclList	: MethodDeclList MethodDecl
 		;
 
 MethodDecl	: PUBLIC Type id '(' FormalList ')' '{' VarDeclList StatementList RETURN Exp ';' '}'
+		| PUBLIC Type id '(' FormalList ')' '{' StatementList RETURN Exp ';' '}'
+		| PUBLIC Type id '(' FormalList ')' '{' RETURN Exp ';' '}'
 		;
 
 FormalList	: Type id FormalRestList
@@ -53,17 +58,21 @@ FormalRestList	: FormalRestList FormalRest
 FormalRest	: ',' Type id
 		;
 
-Type		: INT
-		| BOOLEAN
-		| id
+Type		: PrimeType 
 		| Type '[' ']'
 		;
 
+PrimeType	: INT
+		| BOOLEAN
+		| id
+		;
+
 StatementList	: StatementList Statement
-		|
+		| Statement 
 		;
 
 Statement	: '{' StatementList '}'
+		| '{' '}'
 		| IF '(' Exp ')' Statement ELSE Statement
 		| WHILE '(' Exp ')' Statement
 		| PRINT '(' Exp ')' ';'
@@ -76,31 +85,42 @@ Index		: '[' Exp ']'
 		| Index '[' Exp ']'
 		;
 
-Exp		: Exp op Exp
-		| Exp '<' Exp
-		| Exp '>' Exp
-		| Exp '+' Exp
-		| Exp '-' Exp
-		| Exp '*' Exp
-		| Exp '/' Exp
-		| '!' Exp
-		| '+' Exp
-		| '-' Exp
-		| '(' Exp ')'
-		| id Index
-		| id '.' LENGTH
-		| id Index '.' LENGTH
-		| INTEGER_LITERAL
+Exp		: Exp op PrefixExp
+		| Exp '<' PrefixExp
+		| Exp '>' PrefixExp
+		| Exp '+' PrefixExp
+		| Exp '-' PrefixExp
+		| Exp '*' PrefixExp
+		| Exp '/' PrefixExp 
+		| PrefixExp
+		;
+
+PrefixExp	: '!' PrimaryExp
+		| '-' PrimaryExp
+		| '+' PrimaryExp
+		| PrimaryExp
+		;
+
+PrimaryExp	: INTEGER_LITERAL
 		| TRUE
 		| FALSE
 		| Object
-		| Object '.' id '(' ExpList ')'
+		| '(' Exp ')' 
+		| id '.' LENGTH
+		| id Index '.' LENGTH
+		| id '.' id '(' ExpList ')'
+		| ObjectPrime '.' id '(' ExpList ')'
 		;
 
 Object		: id
 		| THIS
 		| NEW id '(' ')'
-		| NEW Type Index
+		| NEW PrimeType Index
+		; 
+
+ObjectPrime	: THIS
+		| NEW id '(' ')'
+		| NEW PrimeType Index
 		;
 
 ExpList		: Exp ExpRestList
@@ -117,11 +137,10 @@ ExpRest 	: ',' Exp
 %%
 
 void yyerror(char *s) {
-	fprintf(stderr, "%s\n", s);
+	fprintf(stderr, "Syntax errors in %d\n", yylineno);
 }
 
 int main(int argc, char **argv) {
-	yy_flex_debug = 1;
 	++argv, --argc;
 	if (argc > 0)
 		yyin = fopen(argv[0], "r");
