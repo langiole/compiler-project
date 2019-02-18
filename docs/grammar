@@ -4,20 +4,29 @@
  ClassDecl : class id { VarDecl* MethodDecl* }
            : class id extends id { VarDecl* MethodDecl* }
    VarDecl : Type id ;
+
 MethodDecl : public Type id ( FormalList )
                { VarDecl* Statement* return Exp ;}
+
 FormalList : Type id FormalRest*
            :
+
 FormalRest :, Type id
-      Type : int
+
+ PrimeType : int
            : boolean
            : id
+
+      Type : PrimeType
            : Type [ ]
+
  Statement : { Statement* }
            : if ( Exp ) Statement else Statement
            : while ( Exp ) Statement
            : System.out.println ( Exp ) ;
            : System.out.println ( STRING_LITERAL ) ;
+           : System.out.print ( Exp ) ;
+           : System.out.print ( STRING_LITERAL ) ;
            : id = Exp ;
            : id Index = Exp ;
     Index  : [ Exp ]
@@ -38,7 +47,7 @@ FormalRest :, Type id
   Object   : id
            : this
            : new id ()
-           : new Type Index
+           : new PrimeType Index
    ExpList : Exp ExpRest*
            :
   ExpRest  :  ,Exp
