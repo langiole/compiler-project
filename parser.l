@@ -34,7 +34,8 @@ SYNTAX_ERR 		(\+\+)|(--)
 "if" 			{ return IF; }
 "else" 			{ return ELSE; }
 "while" 		{ return WHILE; }
-"System.out.println" 	{ return PRINT; }
+"System.out.println" 	{ return PRINTLN; }
+"System.out.print"	{ return PRINT; }
 "length" 		{ return LENGTH; }
 "true" 			{ return TRUE; }
 "false" 		{ return FALSE; }

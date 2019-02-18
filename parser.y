@@ -11,7 +11,7 @@
 %token STRING_LITERAL
 %token INTEGER_LITERAL
 %token op
-%token FOR CLASS PUBLIC STATIC VOID MAIN STRING EXTENDS RETURN INT BOOLEAN IF ELSE WHILE PRINT LENGTH TRUE FALSE THIS NEW
+%token FOR CLASS PUBLIC STATIC VOID MAIN STRING EXTENDS RETURN INT BOOLEAN IF ELSE WHILE PRINT PRINTLN LENGTH TRUE FALSE THIS NEW
 
 %%
 
@@ -82,10 +82,13 @@ Statement	: '{' StatementList '}'
 		| '{' '}'
 		| IF '(' Exp ')' Statement ELSE Statement
 		| WHILE '(' Exp ')' Statement
+		| PRINTLN '(' Exp ')' ';'
+		| PRINTLN '(' STRING_LITERAL ')' ';'
 		| PRINT '(' Exp ')' ';'
 		| PRINT '(' STRING_LITERAL ')' ';'
 		| id '=' Exp ';'
 		| id Index '=' Exp ';'
+		| RETURN Exp ';'
 		;
 
 Index		: '[' Exp ']'
