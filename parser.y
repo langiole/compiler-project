@@ -38,17 +38,8 @@ VarDeclList	: VarDeclList VarDecl
 		| 
 		;
 
-VarDecl		: VDType id ';'
+VarDecl		: TypePrime id ';'
 		| id id ';'
-		;
-
-VDType		: VDTypePrime
-		| VDType '[' ']'
-		| id '[' ']'
-		;
-
-VDTypePrime	: INT
-		| BOOLEAN
 		;
 
 MethodDeclList	: MethodDeclList MethodDecl
@@ -70,13 +61,22 @@ FormalRestList	: FormalRestList FormalRest
 FormalRest	: ',' Type id
 		;
 
-Type		: PrimeType 
+Type		: PrimType 
 		| Type '[' ']'
 		;
 
-PrimeType	: INT
+PrimType	: INT
 		| BOOLEAN
 		| id
+		;
+
+TypePrime	: PrimTypePrime
+		| TypePrime '[' ']'
+		| id '[' ']'
+		;
+
+PrimTypePrime	: INT
+		| BOOLEAN
 		;
 
 StatementList	: StatementList Statement
@@ -125,12 +125,12 @@ Exp		: Exp op Exp
 Object		: id
 		| THIS
 		| NEW id '(' ')'
-		| NEW PrimeType Index
+		| NEW PrimType Index
 		; 
 
 ObjectPrime	: THIS
 		| NEW id '(' ')'
-		| NEW PrimeType Index
+		| NEW PrimType Index
 		;
 
 ExpList		: Exp ExpRestList
