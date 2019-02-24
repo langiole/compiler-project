@@ -1,5 +1,6 @@
 %{
 	#include <stdio.h>
+//	#include "ast.h"
 	int yylex(void);
 	void yyerror(char *);
 	extern FILE *yyin;
@@ -12,7 +13,11 @@
 %token INTEGER_LITERAL
 %token op
 %token FOR CLASS PUBLIC STATIC VOID MAIN STRING EXTENDS RETURN INT BOOLEAN IF ELSE WHILE PRINT PRINTLN LENGTH TRUE FALSE THIS NEW
-
+%left '+' '-'
+%left '*' '/'
+%left op
+%left '<' '>'
+%left '!'
 %%
 
 Program 	: MainClass ClassDeclList
@@ -95,27 +100,22 @@ Index		: '[' Exp ']'
 		| Index '[' Exp ']'
 		;
 
-Exp		: Exp op PrefixExp
-		| Exp '<' PrefixExp
-		| Exp '>' PrefixExp
-		| Exp '+' PrefixExp
-		| Exp '-' PrefixExp
-		| Exp '*' PrefixExp
-		| Exp '/' PrefixExp 
-		| PrefixExp
-		;
-
-PrefixExp	: '!' PrimaryExp
-		| '-' PrimaryExp
-		| '+' PrimaryExp
-		| PrimaryExp
-		;
-
-PrimaryExp	: INTEGER_LITERAL
+Exp		: Exp op Exp 
+		| Exp '<' Exp
+		| Exp '>' Exp 
+		| Exp '+' Exp
+		| Exp '-' Exp 
+		| Exp '*' Exp
+		| Exp '/' Exp 
+		| '!' Exp
+		| '-' Exp
+		| '+' Exp
+		| INTEGER_LITERAL
 		| TRUE
 		| FALSE
 		| Object
 		| '(' Exp ')' 
+		| id Index
 		| id '.' LENGTH
 		| id Index '.' LENGTH
 		| id '.' id '(' ExpList ')'
