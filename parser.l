@@ -1,7 +1,9 @@
 %{
 	#include <stdio.h>
+	#include <stdlib.h>
 	#include "y.tab.h"	
 	#define PRINTDEBUG(x, y) fprintf(stderr, "\nDBG: %s, lineno: %d\n", x,y);
+	void yyerror(const char *s);
 %}
 %option yylineno
 
@@ -13,7 +15,6 @@ NoQuoteDashNl 		[^\"\\\n]
 id			{letter}({letter}|{digit}|_)*
 INTEGER_LITERAL 	({digit})*{digit}
 STRING_LITERAL		\"(\\.|{NoQuoteDashNl})*\"
-op 			(&&)|(\|\|)|(<=)|(>=)|(==)|(!=)
 single_char 		[+\-!{}[\]();,=.<>*/]
 sl_comment 		(\/\/.*)
 ml_comment 		(\/\*)({NoStar}|\*+{NoStarDash})*\*+\/
@@ -42,15 +43,20 @@ SYNTAX_ERR 		(\+\+)|(--)
 "this" 			{ return THIS; }
 "new" 			{ return NEW; }
 {id}			{ return id; }
-{INTEGER_LITERAL}	{ return INTEGER_LITERAL; }
-{STRING_LITERAL} 	{ return STRING_LITERAL; } 
-{op} 			{ return op; }
+{INTEGER_LITERAL}	{ return INTEGERLITERAL; }
+{STRING_LITERAL} 	{ return STRINGLITERAL; }
+"&&"			{ return AND; }
+"||"			{ return OR; }
+"<="			{ return LESSTHANEQ; }
+">="			{ return GREATTHANEQ; }
+"=="			{ return EQ; }
+"!=" 			{ return NOTEQ; }
 {single_char} 		{ return *yytext; }
 {sl_comment} 		{ }
 {ml_comment} 		{ }
-{SYNTAX_ERR} 	 	{ printf("Syntax errors in %d\n", yylineno); }
+{SYNTAX_ERR} 	 	{ yyerror(""); }
 [ \n\t\r] 		{ }
-.			{ printf("Syntax errors in %d\n", yylineno); }
+.			{ yyerror(""); } 
 %%
 
 int yywrap(void) { return 1; }
