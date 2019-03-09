@@ -28,15 +28,15 @@ class Hanoi {
 		dummy = this.recursive(n, 1, 2, 3);
 		
 		// 3. declaring variables after a statement is not allowed.
-		int x;
+//		int x;
 
 		// 4. this function does not have a return statement!
 		//    uncomment the following line to move on.
-		// return 1;
+		 return 1;
 	}
 
 	// 5. the method name is missing here!
-	public int /* recursive */ (int n, int start, int middle, int end) {
+	public int recursive (int n, int start, int middle, int end) {
 		if (n <= 1) {
 			System.out.println("move 1 from ");
 			System.out.println(start);
@@ -46,7 +46,7 @@ class Hanoi {
 		} else {
 			// 6. variable declaration cannot appear in statement list.
 			//    They have to be at the beginning of a method.
-			int troublemaker;
+			//int troublemaker;
 
 			// move 1 to n-1 from start to middle
 			dummy = this.recursive(n-1, start, end, middle);

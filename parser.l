@@ -42,9 +42,9 @@ SYNTAX_ERR 		(\+\+)|(--)
 "false" 		{ return FALSE; }
 "this" 			{ return THIS; }
 "new" 			{ return NEW; }
-{id}			{ return id; }
-{INTEGER_LITERAL}	{ return INTEGERLITERAL; }
-{STRING_LITERAL} 	{ return STRINGLITERAL; }
+{id}			{ yylval.node = mkleaf(IDENTIFIER, strdup(yytext)); return id; }
+{INTEGER_LITERAL}	{ yylval.node = mkleaf(INTEGERLITERAL, strdup(yytext)); return INTEGERLITERAL; }
+{STRING_LITERAL} 	{ yylval.node = mkleaf(STRINGLITERAL, strdup(yytext)); return STRINGLITERAL; }
 "&&"			{ return AND; }
 "||"			{ return OR; }
 "<="			{ return LESSTHANEQ; }

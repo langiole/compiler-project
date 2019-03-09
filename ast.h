@@ -26,7 +26,6 @@
 #define PRINTLNSTR 33
 #define PRINTEXP 34
 #define PRINTSTR 35
-#define ASSIGN 36
 #define ARRASSGN 39
 #define RET 40
 #define MULTIINDEX 42
@@ -40,8 +39,6 @@
 #define LESSTHAN 50
 #define GREATTHAN 51
 #define UNARYOP 52
-#define EXPTRUE 55
-#define EXPFALSE 56
 #define EXPOBJECT 57
 #define OBJECT 58
 #define PAREN 59
@@ -54,15 +51,11 @@
 #define EXPINT 68
 #define CALL 69
 #define OBJID 70
-#define OBJTHIS 71
 #define NEWOBJ 72
 #define NEWARR 73
 #define EXPLIST 74
 #define EXPRESTLIST 75
 #define EXPREST 76
-#define INTEGERTYPE 77
-#define BOOLEANTYPE 78
-
 
 typedef struct Program Program;
 typedef struct MainClass MainClass;
@@ -123,6 +116,8 @@ AST_Node * mknode4(int mode, AST_Node * n1, AST_Node * n2, AST_Node * n3, AST_No
 AST_Node * mknode5(int mode, AST_Node * n1, AST_Node * n2, AST_Node * n3, AST_Node * n4, AST_Node * n5);
 AST_Node * mknode6(int mode, AST_Node * n1, AST_Node * n2, AST_Node * n3, AST_Node * n4, AST_Node * n5, AST_Node * n6);
 
+AST_Node * mkleaf();
+
 struct Table {
 	int size;
 	Entry * entries[];
@@ -138,6 +133,7 @@ struct Entry {
 };
 
 struct AST_Node {
+	int lineno;
 	int mode;
 	union {
 		Program * program; 
@@ -171,16 +167,19 @@ struct AST_Node {
 struct ExpList {
 	Exp * e;
 	ExpRestList * erl;
+	AST_Node * n;
 };
 
 struct ExpRestList {
 	ExpRest * head;
-	ExpRest * curr;
+	ExpRest * tail;
+	AST_Node * n;
 };
 
 struct ExpRest {
 	Exp * e;
 	ExpRest * next;
+	AST_Node * n;
 };
 
 struct Exp {
@@ -197,6 +196,12 @@ struct Exp {
 		ParenExp * pe;
 		Call * c;
 	};
+	int type;
+	union {
+		int value;
+		Identifier * id;
+	};
+	AST_Node * n;
 };
 
 struct Boolean {
@@ -205,6 +210,7 @@ struct Boolean {
 
 struct IntegerLiteral {
 	int value;
+	AST_Node * n;
 };
 
 struct Call {
@@ -250,6 +256,7 @@ struct Object {
 		NewObject * no;
 		NewArray * na;
 	};
+	AST_Node * n;
 };
 
 struct This {
@@ -276,10 +283,12 @@ struct Index {
 		Exp * e;
 		MultiIndex * mi;
 	};
+	AST_Node * n;
 };
 
 struct Identifier {
 	char * name;
+	AST_Node * n;
 };
 
 struct BooleanType {
@@ -292,7 +301,8 @@ struct IntegerType {
 
 struct StatementList {
 	Statement * head;
-	Statement * curr;
+	Statement * tail;
+	AST_Node * n;
 };
 
 struct Statement {
@@ -307,6 +317,7 @@ struct Statement {
 		Exp * e;
 	};
 	Statement * next;
+	AST_Node * n;
 };
 
 struct Block {
@@ -326,6 +337,7 @@ struct While {
 
 struct StringLiteral {
 	char * str;
+	AST_Node * n;
 };
 
 struct Print {
@@ -355,6 +367,7 @@ struct PrimType {
 		BooleanType * bt;
 		Identifier * i;
 	};
+	AST_Node * n;
 };
 
 struct ArrayType {
@@ -367,23 +380,27 @@ struct Type {
 		PrimType * pt;
 		ArrayType * at;
 	};
+	AST_Node * n;
 };
 	
 struct FormalRest {
 	Type * t;
 	Identifier * i;
 	FormalRest * next;
+	AST_Node * n;
 };
 
 struct FormalRestList {
 	FormalRest * head;
-	FormalRest * curr;
+	FormalRest * tail;
+	AST_Node * n;
 };
 
 struct FormalList {
 	Type * t;
 	Identifier * i;
 	FormalRestList * fr;
+	AST_Node * n;
 };
 
 struct MethodDecl {
@@ -394,22 +411,26 @@ struct MethodDecl {
 	StatementList * sl;
 	Exp * e;
 	MethodDecl * next;
+	AST_Node * n;
 };
 
 struct MethodDeclList {
 	MethodDecl * head;
-	MethodDecl * curr;
+	MethodDecl * tail;
+	AST_Node * n;
 };
 
 struct VarDecl {
 	Type * t;
 	Identifier * i;
 	VarDecl * next;
+	AST_Node * n;
 };
 
 struct VarDeclList {
 	VarDecl * head;
-	VarDecl * curr;
+	VarDecl * tail;
+	AST_Node * n;
 };
 
 struct ClassDeclExtends {
@@ -432,17 +453,20 @@ struct ClassDecl {
 		ClassDeclExtends * ce;
 	};
 	ClassDecl * next;
+	AST_Node * n;
 };
 
 struct ClassDeclList {
 	ClassDecl * head;
-	ClassDecl * curr;
+	ClassDecl * tail;
+	AST_Node * n;
 };
 
 struct MainClass {
 	Identifier * i1;
 	Identifier * i2;
 	Statement * s;
+	AST_Node * n;
 };
 
 struct Program {
