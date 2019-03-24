@@ -1,5 +1,6 @@
 #include "y.tab.h"
 
+PrimType * getPrimType(Type * t);
 ClassDecl * findClass(Identifier * i);
 MethodDecl * findMethod(ClassDecl * cd, Identifier * i, ExpList * el);
 int identifiersEqual(Identifier * i1, Identifier * i2);

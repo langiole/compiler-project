@@ -88,7 +88,7 @@ void interpretObject(Exp * e) {
 	{
 	case IDENTIFIER:
 		// propagate
-		e->value = o->i->value;
+		e->value = findVarId(o->i)->value;
 		break;
 	}
 }
