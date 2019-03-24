@@ -1522,7 +1522,7 @@ yyreduce:
 
   case 11:
 #line 62 "parser.y" /* yacc.c:1646  */
-    { (yyval.node) = mknode2(VARDECL, mknode1(TYPE, mknode1(PRIMTYPE, (yyvsp[-2].node))), (yyvsp[-1].node)); }
+    { (yyval.node) = mknode2(VARDECL, mknode1(TYPEPRIM, mknode1(PRIMTYPEID, (yyvsp[-2].node))), (yyvsp[-1].node)); }
 #line 1527 "y.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1948,7 +1948,7 @@ yyreduce:
 
   case 82:
 #line 182 "parser.y" /* yacc.c:1646  */
-    { (yyval.node) = mknode1(EXPREST, (yyvsp[0].node)); }
+    { (yyval.node) = (yyvsp[0].node); }
 #line 1953 "y.tab.c" /* yacc.c:1646  */
     break;
 
@@ -2196,6 +2196,9 @@ int main(int argc, char **argv) {
 	else
 		yyin = stdin;
 	yyparse();
+	TYPECHECK = 1;
 	dfs(root);
+	TYPECHECK = 0;
+	if (!TYPEERR) { dfs(root); }
 	return 0;
 }

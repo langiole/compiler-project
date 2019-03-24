@@ -44,7 +44,12 @@ SYNTAX_ERR 		(\+\+)|(--)
 "new" 			{ return NEW; }
 {id}			{ yylval.node = mkleaf(IDENTIFIER, strdup(yytext)); return id; }
 {INTEGER_LITERAL}	{ yylval.node = mkleaf(INTEGERLITERAL, strdup(yytext)); return INTEGERLITERAL; }
-{STRING_LITERAL} 	{ yylval.node = mkleaf(STRINGLITERAL, strdup(yytext)); return STRINGLITERAL; }
+{STRING_LITERAL} 	{ 
+				char * temp = ++yytext;
+				temp[strlen(yytext) - 1] = 0;
+				yylval.node = mkleaf(STRINGLITERAL, strdup(temp)); 
+				return STRINGLITERAL; 
+			}
 "&&"			{ return AND; }
 "||"			{ return OR; }
 "<="			{ return LESSTHANEQ; }

@@ -1,4 +1,15 @@
 #include "y.tab.h"
 
-void interpretBinaryExp(int op, Exp * e, Exp * e1, Exp * e2);
-void interpretUnaryExp(int op, Exp * e, Exp * exp);
+void interpretObject(Exp * e);
+void interpretReturn(Exp * e);
+void interpretMethodDecl(MethodDecl * md);
+void interpretAssign(Assign * a);
+void interpretCall(Exp * e);
+void interpretIntegerLiteral(Exp * exp);
+void interpretBoolean(Exp * exp);
+void interpretParen(Exp * exp);
+void interpretBinaryOp(Exp * exp);
+void interpretUnaryOp(Exp * exp);
+void interpretIf(If * i);
+void interpretWhile(While * w);
+void interpretPrint(Print * p);

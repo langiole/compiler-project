@@ -59,7 +59,7 @@ VarDeclList
 
 VarDecl		
 	: TypePrime id ';' 	{ $$ = mknode2(VARDECL, $1, $2); }
-	| id id ';' 		{ $$ = mknode2(VARDECL, mknode1(TYPE, mknode1(PRIMTYPE, $1)), $2); }
+	| id id ';' 		{ $$ = mknode2(VARDECL, mknode1(TYPEPRIM, mknode1(PRIMTYPEID, $1)), $2); }
 	;
 
 MethodDeclList	
@@ -73,17 +73,17 @@ MethodDecl
 	;
 
 FormalList	
-	: Type id FormalRestList 	{ $$ = mknode3(FORMALLIST, $1, $2, $3); }
-	| 				{ $$ = mknode0(FORMALLIST); }
+	: Type id FormalRestList 	{ $$ = mknode3(FORMALLIST, $1, $2, $3); }	// prepend formalrest to formallist
+	| 				{ $$ = mknode0(FORMALLIST); }			// make formallist
 	;
 
 FormalRestList	
-	: FormalRestList FormalRest 	{ $$ = mknode2(FORMALRESTLIST, $1, $2); }
-	| 				{ $$ = mknode0(FORMALRESTLIST); }
+	: FormalRestList FormalRest 	{ $$ = mknode2(FORMALRESTLIST, $1, $2); }	// append formalrest to formallist
+	| 				{ $$ = mknode0(FORMALRESTLIST); }		// make formallist
 	;
 
 FormalRest	
-	: ',' Type id 	{ $$ = mknode2(FORMALREST, $2, $3); }
+	: ',' Type id 	{ $$ = mknode2(FORMALREST, $2, $3); }				// make formalrest
 	;
 
 Type
@@ -171,15 +171,15 @@ ObjectPrime	: THIS 			{ $$ = mknode0(THIS); }
 		| NEW PrimType Index 	{ $$ = mknode2(NEWARR, $2, $3); }
 		;
 
-ExpList		: Exp ExpRestList 	{ $$ = mknode2(EXPLIST, $1, $2); }
-		|			{ $$ = mknode0(EXPLIST); }
+ExpList		: Exp ExpRestList 	{ $$ = mknode2(EXPLIST, $1, $2); } 	// prepend exp to explist
+		|			{ $$ = mknode0(EXPLIST); } 		// make explist
 		;
 
-ExpRestList 	: ExpRestList ExpRest 	{ $$ = mknode2(EXPRESTLIST, $1, $2); }
-		| 			{ $$ = mknode0(EXPRESTLIST); }
+ExpRestList 	: ExpRestList ExpRest 	{ $$ = mknode2(EXPRESTLIST, $1, $2); } 	// append exp to explist
+		| 			{ $$ = mknode0(EXPRESTLIST); } 		// make explist
 		;
 
-ExpRest 	: ',' Exp 		{ $$ = mknode1(EXPREST, $2); }
+ExpRest 	: ',' Exp 		{ $$ = $2; }
 		;
 
 %%
@@ -196,6 +196,9 @@ int main(int argc, char **argv) {
 	else
 		yyin = stdin;
 	yyparse();
+	TYPECHECK = 1;
 	dfs(root);
+	TYPECHECK = 0;
+	if (!TYPEERR) { dfs(root); }
 	return 0;
 }

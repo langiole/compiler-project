@@ -966,76 +966,81 @@ YY_RULE_SETUP
 case 24:
 YY_RULE_SETUP
 #line 47 "parser.l"
-{ yylval.node = mkleaf(STRINGLITERAL, strdup(yytext)); return STRINGLITERAL; }
+{ 
+				char * temp = ++yytext;
+				temp[strlen(yytext) - 1] = 0;
+				yylval.node = mkleaf(STRINGLITERAL, strdup(temp)); 
+				return STRINGLITERAL; 
+			}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 48 "parser.l"
+#line 53 "parser.l"
 { return AND; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 49 "parser.l"
+#line 54 "parser.l"
 { return OR; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 50 "parser.l"
+#line 55 "parser.l"
 { return LESSTHANEQ; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 51 "parser.l"
+#line 56 "parser.l"
 { return GREATTHANEQ; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 52 "parser.l"
+#line 57 "parser.l"
 { return EQ; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 53 "parser.l"
+#line 58 "parser.l"
 { return NOTEQ; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 54 "parser.l"
+#line 59 "parser.l"
 { return *yytext; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 55 "parser.l"
+#line 60 "parser.l"
 { }
 	YY_BREAK
 case 33:
 /* rule 33 can match eol */
 YY_RULE_SETUP
-#line 56 "parser.l"
+#line 61 "parser.l"
 { }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 57 "parser.l"
+#line 62 "parser.l"
 { yyerror(""); }
 	YY_BREAK
 case 35:
 /* rule 35 can match eol */
 YY_RULE_SETUP
-#line 58 "parser.l"
+#line 63 "parser.l"
 { }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 59 "parser.l"
+#line 64 "parser.l"
 { yyerror(""); } 
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 60 "parser.l"
+#line 65 "parser.l"
 ECHO;
 	YY_BREAK
-#line 1039 "lex.yy.c"
+#line 1044 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2052,7 +2057,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 60 "parser.l"
+#line 65 "parser.l"
 
 
 int yywrap(void) { return 1; }

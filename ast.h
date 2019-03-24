@@ -55,7 +55,6 @@
 #define NEWARR 73
 #define EXPLIST 74
 #define EXPRESTLIST 75
-#define EXPREST 76
 
 typedef struct Program Program;
 typedef struct MainClass MainClass;
@@ -118,20 +117,6 @@ AST_Node * mknode6(int mode, AST_Node * n1, AST_Node * n2, AST_Node * n3, AST_No
 
 AST_Node * mkleaf();
 
-struct Table {
-	int size;
-	Entry * entries[];
-};
-
-struct Entry {
-	int mode;
-	union {
-		Identifier * i;
-		IntegerLiteral * il;
-		Boolean * b;
-	};
-};
-
 struct AST_Node {
 	int lineno;
 	int mode;
@@ -165,20 +150,8 @@ struct AST_Node {
 };
 
 struct ExpList {
-	Exp * e;
-	ExpRestList * erl;
-	AST_Node * n;
-};
-
-struct ExpRestList {
-	ExpRest * head;
-	ExpRest * tail;
-	AST_Node * n;
-};
-
-struct ExpRest {
-	Exp * e;
-	ExpRest * next;
+	Exp * head;
+	Exp * tail;
 	AST_Node * n;
 };
 
@@ -196,11 +169,14 @@ struct Exp {
 		ParenExp * pe;
 		Call * c;
 	};
-	int type;
+	Type * type;
 	union {
 		int value;
-		Identifier * id;
+		int * intArr;
+		ClassDecl * classArr;
 	};
+	Exp * next;
+	Exp * prev;
 	AST_Node * n;
 };
 
@@ -278,6 +254,7 @@ struct MultiIndex {
 };
 
 struct Index {
+	Type * t;
 	int mode;
 	union {
 		Exp * e;
@@ -288,6 +265,11 @@ struct Index {
 
 struct Identifier {
 	char * name;
+	union {
+		int value;
+		int * intArr;
+		ClassDecl * classArr;
+	};
 	AST_Node * n;
 };
 
@@ -362,11 +344,7 @@ struct ArrayAssign {
 
 struct PrimType {
 	int mode;
-	union {
-		IntegerType * it;
-		BooleanType * bt;
-		Identifier * i;
-	};
+	Identifier * i;
 	AST_Node * n;
 };
 
@@ -387,19 +365,13 @@ struct FormalRest {
 	Type * t;
 	Identifier * i;
 	FormalRest * next;
-	AST_Node * n;
-};
-
-struct FormalRestList {
-	FormalRest * head;
-	FormalRest * tail;
+	FormalRest * prev;
 	AST_Node * n;
 };
 
 struct FormalList {
-	Type * t;
-	Identifier * i;
-	FormalRestList * fr;
+	FormalRest * head;
+	FormalRest * tail;
 	AST_Node * n;
 };
 
@@ -410,7 +382,11 @@ struct MethodDecl {
 	VarDeclList * vl;
 	StatementList * sl;
 	Exp * e;
+
+	int ret;
+
 	MethodDecl * next;
+	MethodDecl * prev;
 	AST_Node * n;
 };
 
@@ -424,6 +400,7 @@ struct VarDecl {
 	Type * t;
 	Identifier * i;
 	VarDecl * next;
+	VarDecl * prev;
 	AST_Node * n;
 };
 
@@ -433,26 +410,16 @@ struct VarDeclList {
 	AST_Node * n;
 };
 
-struct ClassDeclExtends {
+struct ClassDecl {
+	int mode;
+
 	Identifier * i1;
 	Identifier * i2;
 	VarDeclList * vl;
 	MethodDeclList * ml;
-};
 
-struct ClassDeclSimple {
-	Identifier * i;
-	VarDeclList * vl;
-	MethodDeclList * ml;
-};
-
-struct ClassDecl {
-	int mode;
-	union {
-		ClassDeclSimple * cs;
-		ClassDeclExtends * ce;
-	};
 	ClassDecl * next;
+	ClassDecl * prev;
 	AST_Node * n;
 };
 

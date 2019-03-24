@@ -2,24 +2,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "typecheck.h"
-#include "interpreter.h"
+
+extern int yylineno;
 
 AST_Node * mkleaf(int mode, char * ptr) {
 	switch (mode) {
 	case IDENTIFIER:
 	{
 		Identifier * i = malloc(sizeof(Identifier));
-		Entry * e = malloc(sizeof(Entry));
 		AST_Node * node = malloc(sizeof(AST_Node));
 
 		i->name = ptr;
 		i->n = node;
-		
-		e->mode = IDENTIFIER;
-		e->i = i;
 
 		node->mode = IDENTIFIER;
 		node->identifier = i;
+		node->lineno = yylineno;
 
 		return node;
 	}
@@ -105,22 +103,9 @@ AST_Node * binaryOp(int op, Exp * e1, Exp * e2) {
 	e->bo = bo;
 	e->n = node;
 
-	int type1 = e1->type;
-	int type2 = e2->type;
-
-	if (type1 != 0 && type2 != 0)
-	{
-		// begin typechecking
-		if (typecheckBinaryExp(op, type1, type2))
-			TYPEERR = 1;
-		
-		// begin program interpretation
-		if (!TYPEERR)
-			interpretBinaryExp(op, e, e1, e2);
-	}
-
 	node->mode = EXP;
 	node->exp = e;
+	node->lineno = yylineno;
 
 	return node;
 }
@@ -149,21 +134,9 @@ AST_Node * unaryOp(int op, Exp * exp) {
 	e->uo = uo;
 	e->n = node;
 
-	int type = exp->type;
-
-	if (type != 0)
-	{
-		// begin typechecking
-		if (typecheckUnaryExp(op, type))
-			TYPEERR = 1;
-		
-		// begin program interpretation
-		if (!TYPEERR)
-			interpretUnaryExp(op, e, exp);
-	}
-
 	node->mode = EXP;
 	node->exp = e;
+	node->lineno = yylineno;
 
 	return node;
 }
@@ -179,12 +152,9 @@ AST_Node * boolean(int value) {
 	e->b = b;
 	e->n = node;
 
-	// propagate type and value
-	e->type = BOOLEAN;
-	e->value = value;
-
 	node->mode = EXP;
 	node->exp = e;
+	node->lineno = yylineno;
 
 	return node;
 }
@@ -236,18 +206,20 @@ AST_Node * mknode0(int mode) {
 
 		node->mode = FORMALLIST;
 		node->formallist = fl;
+		node->lineno = yylineno;
 
 		return node;
 	}
 	case FORMALRESTLIST:
 	{
-		FormalRestList * fl = malloc(sizeof(FormalRestList));
+		FormalList * fl = malloc(sizeof(FormalList));
 		AST_Node * node = malloc(sizeof(AST_Node));
 
 		fl->n = node;
 
-		node->mode = FORMALRESTLIST;
-		node->formalrestlist = fl;
+		node->mode = FORMALLIST;
+		node->formallist = fl;
+		node->lineno = yylineno;
 
 		return node;
 	}
@@ -283,24 +255,22 @@ AST_Node * mknode0(int mode) {
 	}
 	case EXPRESTLIST:
 	{
-		ExpRestList * erl = malloc(sizeof(ExpRestList));
+		ExpList * el = malloc(sizeof(ExpList));
 		AST_Node * node = malloc(sizeof(AST_Node));
 
-		erl->n = node;
+		el->n = node;
 
-		node->mode = EXPRESTLIST;
-		node->exprestlist = erl;
+		node->mode = EXPLIST;
+		node->explist = el;
 
 		return node;
 	}
 	case PRIMTYPEINT:
 	{
 		PrimType * pt = malloc(sizeof(PrimType));
-		IntegerType * it = malloc(sizeof(IntegerType));
 		AST_Node * node = malloc(sizeof(AST_Node));
 
 		pt->mode = INT;
-		pt->it = it;
 		pt->n = node;
 
 		node->mode = PRIMTYPE;
@@ -311,11 +281,9 @@ AST_Node * mknode0(int mode) {
 	case PRIMTYPEBOOL:
 	{
 		PrimType * pt = malloc(sizeof(PrimType));
-		BooleanType * bt = malloc(sizeof(BooleanType));
 		AST_Node * node = malloc(sizeof(AST_Node));
 
 		pt->mode = BOOLEAN;
-		pt->bt = bt;
 		pt->n = node;
 
 		node->mode = PRIMTYPE;
@@ -330,12 +298,8 @@ AST_Node * mknode0(int mode) {
 	case EXPLIST:
 	{
 		ExpList * el = malloc(sizeof(ExpList));
-		Exp * e = malloc(sizeof(Exp));
-		ExpRestList * erl = malloc(sizeof(ExpRestList));
 		AST_Node * node = malloc(sizeof(AST_Node));
 
-		el->e = e;
-		el->erl = erl;
 		el->n = node;
 
 		node->mode = EXPLIST;
@@ -373,6 +337,7 @@ AST_Node * mknode1(int mode, AST_Node * n1) {
 
 		node->mode = TYPE;
 		node->type = t;
+		node->lineno = yylineno;
 
 		return node;
 	}
@@ -390,6 +355,7 @@ AST_Node * mknode1(int mode, AST_Node * n1) {
 
 		node->mode = TYPE;
 		node->type = t;
+		node->lineno = yylineno;
 
 		return node;
 	}
@@ -440,6 +406,7 @@ AST_Node * mknode1(int mode, AST_Node * n1) {
 
 		node->mode = STATEMENT;
 		node->statement = s;
+		node->lineno = yylineno;
 
 		return node;
 	}
@@ -459,6 +426,7 @@ AST_Node * mknode1(int mode, AST_Node * n1) {
 
 		node->mode = STATEMENT;
 		node->statement = s;
+		node->lineno = yylineno;
 
 		return node;
 	}
@@ -478,6 +446,7 @@ AST_Node * mknode1(int mode, AST_Node * n1) {
 
 		node->mode = STATEMENT;
 		node->statement = s;
+		node->lineno = yylineno;
 
 		return node;
 	}
@@ -497,6 +466,7 @@ AST_Node * mknode1(int mode, AST_Node * n1) {
 
 		node->mode = STATEMENT;
 		node->statement = s;
+		node->lineno = yylineno;
 
 		return node;
 	}
@@ -517,14 +487,28 @@ AST_Node * mknode1(int mode, AST_Node * n1) {
 	case INDEX:
 	{
 		Index * ix = malloc(sizeof(Index));
+		Type * t1 = malloc(sizeof(Type));
+		Type * t2 = malloc(sizeof(Type));
+		PrimType * pt = malloc(sizeof(PrimType));
+		ArrayType * at = malloc(sizeof(ArrayType));
 		AST_Node * node = malloc(sizeof(AST_Node));
+
+		t2->mode = PRIMTYPE;
+		t2->pt = pt;
+
+		at->t = t2;
+
+		t1->mode = ARRAYTYPE;
+		t1->at = at;
 
 		ix->mode = EXP;
 		ix->e = n1->exp;
+		ix->t = t1;
 		ix->n = node;
 
 		node->mode = INDEX;
 		node->index = ix;
+		node->lineno = yylineno;
 
 		return node;
 	}
@@ -549,12 +533,9 @@ AST_Node * mknode1(int mode, AST_Node * n1) {
 		e->il = n1->integerliteral;
 		e->n = node;
 
-		// propagate type and value
-		e->type = INT;
-		e->value = n1->integerliteral->value;
-
 		node->mode = EXP;
 		node->exp = e;
+		node->lineno = yylineno;
 
 		return node;
 	}
@@ -569,6 +550,7 @@ AST_Node * mknode1(int mode, AST_Node * n1) {
 
 		node->mode = EXP;
 		node->exp = e;
+		node->lineno = yylineno;
 
 		return node;
 	}
@@ -583,12 +565,6 @@ AST_Node * mknode1(int mode, AST_Node * n1) {
 		e->mode = PAREN;
 		e->pe = pe;
 		e->n = node;
-
-		// propagate type and value
-		if (n1->exp->type != 0) {
-			e->type = n1->exp->type;
-			e->value = n1->exp->value;
-		}
 
 		node->mode = EXP;
 		node->exp = e;
@@ -609,6 +585,7 @@ AST_Node * mknode1(int mode, AST_Node * n1) {
 
 		node->mode = EXP;
 		node->exp = e;
+		node->lineno = yylineno;
 
 		return node;
 	}
@@ -643,19 +620,6 @@ AST_Node * mknode1(int mode, AST_Node * n1) {
 
 		return node;
 	}
-	case EXPREST:
-	{
-		ExpRest * er = malloc(sizeof(ExpRest));
-		AST_Node * node = malloc(sizeof(AST_Node));
-
-		er->e = n1->exp;
-		er->n = node;
-
-		node->mode = EXPREST;
-		node->exprest = er;
-
-		return node;
-	}
 	}
 }
 
@@ -684,7 +648,11 @@ AST_Node * mknode2(int mode, AST_Node * n1, AST_Node * n2) {
 		}
 		else 
 		{
+			// set next and prev
 			n1->classdecllist->tail->next = n2->classdecl;
+			n2->classdecl->prev = n1->classdecllist->tail;
+
+			// set tail
 			n1->classdecllist->tail = n2->classdecl;
 		}
 		return n1;
@@ -696,7 +664,11 @@ AST_Node * mknode2(int mode, AST_Node * n1, AST_Node * n2) {
 			n1->vardecllist->tail = n2->vardecl;
 		}
 		else {
+			// set next and prev
 			n1->vardecllist->tail->next = n2->vardecl;
+			n2->vardecl->prev = n1->vardecllist->tail;
+
+			// set tail
 			n1->vardecllist->tail = n2->vardecl;
 		}
 		return n1;
@@ -712,6 +684,7 @@ AST_Node * mknode2(int mode, AST_Node * n1, AST_Node * n2) {
 
 		node->mode = VARDECL;
 		node->vardecl = vd;
+		node->lineno = yylineno;
 
 		return node;
 	}
@@ -722,21 +695,30 @@ AST_Node * mknode2(int mode, AST_Node * n1, AST_Node * n2) {
 			n1->methoddecllist->tail = n2->methoddecl;
 		}
 		else {
+			// set next and prev
 			n1->methoddecllist->tail->next = n2->methoddecl;
+			n2->methoddecl->prev = n1->methoddecllist->tail;
+
+			// set tail
 			n1->methoddecllist->tail = n2->methoddecl;
 		}
 		return n1;
 	}
 	case FORMALRESTLIST:
 	{
-		if (n1->formalrestlist->head == NULL) {
-			n1->formalrestlist->head = n2->formalrest;
-			n1->formalrestlist->tail = n2->formalrest;
+		if (n1->formallist->head == NULL) {
+			n1->formallist->head = n2->formalrest;
+			n1->formallist->tail = n2->formalrest;
 		}
 		else {
-			n1->formalrestlist->tail->next = n2->formalrest;
-			n1->formalrestlist->tail = n2->formalrest;
+			// set next and prev
+			n1->formallist->tail->next = n2->formalrest;
+			n2->formalrest->prev = n1->formallist->tail;
+
+			// set tail
+			n1->formallist->tail = n2->formalrest;
 		}
+
 		return n1;
 	}
 	case FORMALREST:
@@ -774,6 +756,7 @@ AST_Node * mknode2(int mode, AST_Node * n1, AST_Node * n2) {
 
 		node->mode = STATEMENT;
 		node->statement = s;
+		node->lineno = yylineno;
 
 		return node;
 	}
@@ -792,6 +775,7 @@ AST_Node * mknode2(int mode, AST_Node * n1, AST_Node * n2) {
 
 		node->mode = STATEMENT;
 		node->statement = s;
+		node->lineno = yylineno;
 
 		return node;
 	}
@@ -799,17 +783,26 @@ AST_Node * mknode2(int mode, AST_Node * n1, AST_Node * n2) {
 	{
 		Index * ix = malloc(sizeof(Index));
 		MultiIndex * mi = malloc(sizeof(MultiIndex));
+		Type * t = malloc(sizeof(Type));
+		ArrayType * at = malloc(sizeof(ArrayType));
 		AST_Node * node = malloc(sizeof(AST_Node));
 
 		mi->ix = n1->index;
 		mi->e = n2->exp;
 
+		t->mode = ARRAYTYPE;
+		t->at = at;
+		
+		at->t = n1->index->t;
+
 		ix->mode = MULTIINDEX;
 		ix->mi = mi;
+		ix->t = t;
 		ix->n = node;
 
 		node->mode = INDEX;
 		node->index = ix;
+		node->lineno = yylineno;
 
 		return node;
 	}
@@ -852,6 +845,7 @@ AST_Node * mknode2(int mode, AST_Node * n1, AST_Node * n2) {
 
 		node->mode = EXP;
 		node->exp = e;
+		node->lineno = yylineno;
 
 		return node;
 	}
@@ -870,6 +864,7 @@ AST_Node * mknode2(int mode, AST_Node * n1, AST_Node * n2) {
 
 		node->mode = EXP;
 		node->exp = e;
+		node->lineno = yylineno;
 
 		return node;
 	}
@@ -893,30 +888,36 @@ AST_Node * mknode2(int mode, AST_Node * n1, AST_Node * n2) {
 	}
 	case EXPLIST:
 	{
-		ExpList * el = malloc(sizeof(ExpList));
-		AST_Node * node = malloc(sizeof(AST_Node));
+		if (n2->explist->head == NULL) {
+			n2->explist->head = n1->exp;
+			n2->explist->tail = n1->exp;
+		}
+		else {
+			// set next and prev
+			n2->explist->head->prev = n1->exp;
+			n1->exp->next = n2->explist->head;
 
-		el->e = n1->exp;
-		el->erl = n2->exprestlist;
-		el->n = node;
+			// set head
+			n2->explist->head = n1->exp;
+		}
 
-		node->mode = EXPLIST;
-		node->explist = el;
-
-		return node;
+		return n2;
 	}
 	case EXPRESTLIST:
 	{
-		if (n1->exprestlist->head == NULL) 
-		{
-			n1->exprestlist->head = n2->exprest;
-			n1->exprestlist->tail = n2->exprest;
+		if (n1->explist->head == NULL) {
+			n1->explist->head = n2->exp;
+			n1->explist->tail = n2->exp;
 		}
-		else 
-		{
-			n1->exprestlist->tail->next = n2->exprest;
-			n1->exprestlist->tail = n2->exprest;
+		else {
+			// set next and prev
+			n1->explist->tail->next = n2->exp;
+			n2->exp->prev = n1->explist->tail;
+
+			// set tail
+			n1->explist->tail = n2->exp;
 		}
+
 		return n1;
 	}
 	}
@@ -941,37 +942,47 @@ AST_Node * mknode3(int mode, AST_Node * n1, AST_Node * n2, AST_Node * n3) {
 	}
 	case CLASSDECL:
 	{
-		ClassDecl * c = malloc(sizeof(ClassDecl));
-		ClassDeclSimple * cs = malloc(sizeof(ClassDeclSimple));
+		ClassDecl * cd = malloc(sizeof(ClassDecl));
 		AST_Node * node = malloc(sizeof(AST_Node));
 
-		cs->i = n1->identifier;
-		cs->vl = n2->vardecllist;
-		cs->ml = n3->methoddecllist;
-
-		c->mode = CLASSDECLSIMPLE;
-		c->cs = cs;
-		c->n = node;
+		cd->mode = CLASSDECLSIMPLE;
+		cd->i1 = n1->identifier;
+		cd->vl = n2->vardecllist;
+		cd->ml = n3->methoddecllist;
+		cd->n = node;
 
 		node->mode = CLASSDECL;
-		node->classdecl = c;
+		node->classdecl = cd;
+		node->lineno = yylineno;
 
 		return node;
 	}
 	case FORMALLIST:
 	{
-		FormalList * fl = malloc(sizeof(FormalList));
+		FormalRest * fr = malloc(sizeof(FormalRest));
 		AST_Node * node = malloc(sizeof(AST_Node));
 
-		fl->t = n1->type;
-		fl->i = n2->identifier;
-		fl->fr = n3->formalrestlist;
-		fl->n = node;
+		fr->t = n1->type;
+		fr->i = n2->identifier;
+		fr->n = node;
 
-		node->mode = FORMALLIST;
-		node->formallist = fl;
+		node->mode = FORMALREST;
+		node->formalrest = fr;
 
-		return node;
+		if (n3->formallist->head == NULL) {
+			n3->formallist->head = fr;
+			n3->formallist->tail = fr;
+		}
+		else {
+			// set next and prev
+			n3->formallist->head->prev = fr;
+			fr->next = n3->formallist->head;
+
+			// set head
+			n3->formallist->head = fr;
+		}
+
+		return n3;
 	}
 	case IF:
 	{
@@ -1008,6 +1019,7 @@ AST_Node * mknode3(int mode, AST_Node * n1, AST_Node * n2, AST_Node * n3) {
 
 		node->mode = STATEMENT;
 		node->statement = s;
+		node->lineno = yylineno;
 
 		return node;
 	}
@@ -1027,6 +1039,7 @@ AST_Node * mknode3(int mode, AST_Node * n1, AST_Node * n2, AST_Node * n3) {
 
 		node->mode = EXP;
 		node->exp = e;
+		node->lineno = yylineno;
 
 		return node;
 	}
@@ -1037,21 +1050,18 @@ AST_Node * mknode4(int mode, AST_Node * n1, AST_Node * n2, AST_Node * n3, AST_No
 	switch (mode) {
 	case CLASSDECL:
 	{
-		ClassDecl * c = malloc(sizeof(ClassDecl));
-		ClassDeclExtends * ce = malloc(sizeof(ClassDeclExtends));
+		ClassDecl * cd = malloc(sizeof(ClassDecl));
 		AST_Node * node = malloc(sizeof(AST_Node));
 
-		ce->i1 = n1->identifier;
-		ce->i2 = n2->identifier;
-		ce->vl = n3->vardecllist;
-		ce->ml = n4->methoddecllist;
-
-		c->mode = CLASSDECLEXTENDS;
-		c->ce = ce;
-		c->n = node;
+		cd->mode = CLASSDECLEXTENDS;
+		cd->i1 = n1->identifier;
+		cd->i2 = n2->identifier;
+		cd->vl = n3->vardecllist;
+		cd->ml = n4->methoddecllist;
+		cd->n = node;
 
 		node->mode = CLASSDECL;
-		node->classdecl = c;
+		node->classdecl = cd;
 
 		return node;
 	}
@@ -1063,12 +1073,20 @@ AST_Node * mknode5(int mode, AST_Node * n1, AST_Node * n2, AST_Node * n3, AST_No
 	case METHODDECL:
 	{
 		MethodDecl * md = malloc(sizeof(MethodDecl));
+		StatementList * sl = malloc(sizeof(StatementList));
+		AST_Node * n = malloc(sizeof(AST_Node));
 		AST_Node * node = malloc(sizeof(AST_Node));
+
+		sl->n = n;
+
+		n->mode = STATEMENTLIST;
+		n->statementlist = sl;
 
 		md->t = n1->type;
 		md->i = n2->identifier;
 		md->fl = n3->formallist;
 		md->vl = n4->vardecllist;
+		md->sl = sl;
 		md->e = n5->exp;
 		md->n = node;
 
