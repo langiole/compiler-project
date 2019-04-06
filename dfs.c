@@ -113,7 +113,7 @@ void dfs(AST_Node * root) {
 				curr = curr->next;
 			}
 		}
-		else { dfs(curr->n); }
+		else { if (curr != NULL) { dfs(curr->n); } }
 		break;
 	}
 	case STATEMENT:
@@ -128,8 +128,18 @@ void dfs(AST_Node * root) {
 			{
 				if (typecheckIf(root->statement->i, root->statement->i->e->n->lineno))
 					TYPEERR = 1;
+				// typecheck statements
+				dfs(root->statement->i->s1->n);
+				dfs(root->statement->i->s2->n);
 			}
-			else { interpretIf(root->statement->i); }
+			else 
+			{ 
+				interpretIf(root->statement->i);
+				 
+				// interpret next statement
+				if (root->statement->next != NULL)
+					dfs(root->statement->next->n);
+			}
 			break;
 		}
 		case WHILE:
@@ -138,6 +148,8 @@ void dfs(AST_Node * root) {
 			{
 				if (typecheckWhile(root->statement->w, root->statement->w->e->n->lineno))
 					TYPEERR = 1;
+				// typecheck statement
+				dfs(root->statement->w->s->n);
 			}
 			else 
 			{ 

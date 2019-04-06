@@ -1,5 +1,6 @@
 #include "y.tab.h"
 
+int getDimension(Type * t);
 PrimType * getPrimType(Type * t);
 ClassDecl * findClass(Identifier * i);
 MethodDecl * findMethod(ClassDecl * cd, Identifier * i, ExpList * el);

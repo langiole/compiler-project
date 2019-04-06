@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "dfs.h"
 #include "typecheck.h"
+#include <stdlib.h>
 
 // top town search of vardecllist
 Identifier * searchVarDeclListId(VarDeclList * vl, Identifier * i) {
@@ -82,6 +83,12 @@ void interpretReturn(Exp * e) {
 	CURR_METHOD->i->value = e->value;
 }
 
+int getSize(int * dimArr, int dim) {
+	int size = 1;
+	while(dim != 1) { size *= dimArr[--dim]; }
+	size *= dimArr[--dim];
+}
+
 void interpretObject(Exp * e) {
 	Object * o = e->o;
 	switch (o->mode)
@@ -89,6 +96,34 @@ void interpretObject(Exp * e) {
 	case IDENTIFIER:
 		// propagate
 		e->value = findVarId(o->i)->value;
+		break;
+	case NEWARR:
+		switch (o->na->pt->mode)
+		{
+		case IDENTIFIER:
+			break;
+		default:
+		{
+			int dim = getDimension(o->na->ix->t);
+			int * dimArr = (int*) malloc(dim * sizeof(int));
+
+			int i = 0;
+			Index * ix = o->na->ix;
+			while (ix->mode == MULTIINDEX)
+			{ 
+				dfs(ix->mi->e->n);
+				dimArr[i++] = ix->mi->e->value;
+				ix = ix->mi->ix; 
+			}
+
+			dfs(ix->e->n);
+			dimArr[i] = ix->e->value;
+
+			int s = getSize(dimArr, dim);
+
+			break;		
+		}
+		}
 		break;
 	}
 }
@@ -99,7 +134,31 @@ void interpretAssign(Assign * a) {
 	dfs(a->e->n);
 
 	// propagate
-	findVarId(a->i)->value = a->e->value;
+	switch (a->e->type->mode)
+	{
+	case PRIMTYPE:
+		switch (a->e->type->pt->mode)
+		{
+		case IDENTIFIER:
+			findVarId(a->i)->classArr = a->e->classArr;
+			break;
+		default:
+			findVarId(a->i)->value = a->e->value;
+			break;
+		}
+		break;
+	case ARRAYTYPE:
+		switch (getPrimType(a->e->type)->mode)
+		{
+		case IDENTIFIER:
+			findVarId(a->i)->classArr = a->e->classArr;
+			break;
+		default:
+			findVarId(a->i)->intArr = a->e->intArr;
+			break;
+		}
+		break;
+	}
 }
 
 void interpretMethodDecl(MethodDecl * md) {

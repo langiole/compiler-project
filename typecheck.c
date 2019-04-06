@@ -6,7 +6,7 @@
 #include "dfs.h"
 
 PrimType * getPrimType(Type * t) {
-	if (t->mode == ARRAYTYPE) { while (t->mode == ARRAYTYPE) { t = t->at->t; } }
+	while (t->mode == ARRAYTYPE) { t = t->at->t; }
 	return t->pt;
 }
 
@@ -207,9 +207,6 @@ int typecheckWhile(While * w, int lineno) {
 	if (typeIsBoolean(w->e->type)) { return 0; }
 	
 	printIncompatibleTypeBoolErr(w->e->type, lineno);
-	
-	// typecheck statement
-	dfs(w->s->n);
 
 	return 1;
 }
@@ -224,10 +221,6 @@ int typecheckIf(If * i, int lineno) {
 	if (typeIsBoolean(i->e->type)) { return 0; }
 	
 	printIncompatibleTypeBoolErr(i->e->type, lineno);
-	
-	// typecheck statements
-	dfs(i->s1->n);
-	dfs(i->s2->n);
 
 	return 1;
 }
@@ -286,7 +279,7 @@ int typecheckAssign(Assign * a, int lineno) {
 	}
 
 	// check if types equal
-	if (t2 == NULL) { return 1; }
+	if (t2 == NULL) { return 0; }
 	if (typesEqual(t1, t2)) { return 0; }
 
 	printIncompatibleTypesErr(t1, t2, lineno);
@@ -569,6 +562,8 @@ int typecheckCall(Exp * e, int lineno) {
 		return 1;
 	}
 
+	e->type = md->t;
+
 	return 0;
 }
 
@@ -824,7 +819,7 @@ int typecheckArrayAssign(ArrayAssign * aa, int lineno) {
 	}
 
 	// check if types equal
-	if (t2 == NULL) { return 1; }
+	if (t2 == NULL) { return 0; }
 
 	Type * t3 = makeArrayType(getPrimType(t1), dim1-dim2);
 	if (typesEqual(t2, t3)) { return 0; }

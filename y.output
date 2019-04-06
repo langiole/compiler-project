@@ -775,9 +775,9 @@ State 64
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 87
@@ -892,9 +892,9 @@ State 74
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 102
@@ -912,9 +912,9 @@ State 75
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 103
@@ -993,7 +993,7 @@ State 82
 
 State 83
 
-   59 Exp: '+' . Exp
+   57 Exp: '!' . Exp
 
     id              shift, and go to state 77
     INTEGERLITERAL  shift, and go to state 78
@@ -1001,9 +1001,9 @@ State 83
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 110
@@ -1013,7 +1013,7 @@ State 83
 
 State 84
 
-   58 Exp: '-' . Exp
+   59 Exp: '+' . Exp
 
     id              shift, and go to state 77
     INTEGERLITERAL  shift, and go to state 78
@@ -1021,9 +1021,9 @@ State 84
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 111
@@ -1033,7 +1033,7 @@ State 84
 
 State 85
 
-   57 Exp: '!' . Exp
+   58 Exp: '-' . Exp
 
     id              shift, and go to state 77
     INTEGERLITERAL  shift, and go to state 78
@@ -1041,9 +1041,9 @@ State 85
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 112
@@ -1061,9 +1061,9 @@ State 86
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 113
@@ -1093,12 +1093,12 @@ State 87
     GREATTHANEQ  shift, and go to state 117
     EQ           shift, and go to state 118
     NOTEQ        shift, and go to state 119
-    '+'          shift, and go to state 120
-    '-'          shift, and go to state 121
-    '*'          shift, and go to state 122
-    '/'          shift, and go to state 123
-    '<'          shift, and go to state 124
-    '>'          shift, and go to state 125
+    '<'          shift, and go to state 120
+    '>'          shift, and go to state 121
+    '+'          shift, and go to state 122
+    '-'          shift, and go to state 123
+    '*'          shift, and go to state 124
+    '/'          shift, and go to state 125
     ';'          shift, and go to state 126
 
 
@@ -1126,9 +1126,9 @@ State 90
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 128
@@ -1146,9 +1146,9 @@ State 91
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 129
@@ -1168,9 +1168,9 @@ State 92
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 131
@@ -1190,9 +1190,9 @@ State 93
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 133
@@ -1263,9 +1263,9 @@ State 99
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 138
@@ -1320,12 +1320,12 @@ State 102
     GREATTHANEQ  shift, and go to state 117
     EQ           shift, and go to state 118
     NOTEQ        shift, and go to state 119
-    '+'          shift, and go to state 120
-    '-'          shift, and go to state 121
-    '*'          shift, and go to state 122
-    '/'          shift, and go to state 123
-    '<'          shift, and go to state 124
-    '>'          shift, and go to state 125
+    '<'          shift, and go to state 120
+    '>'          shift, and go to state 121
+    '+'          shift, and go to state 122
+    '-'          shift, and go to state 123
+    '*'          shift, and go to state 124
+    '/'          shift, and go to state 125
     ']'          shift, and go to state 141
 
 
@@ -1351,12 +1351,12 @@ State 103
     GREATTHANEQ  shift, and go to state 117
     EQ           shift, and go to state 118
     NOTEQ        shift, and go to state 119
-    '+'          shift, and go to state 120
-    '-'          shift, and go to state 121
-    '*'          shift, and go to state 122
-    '/'          shift, and go to state 123
-    '<'          shift, and go to state 124
-    '>'          shift, and go to state 125
+    '<'          shift, and go to state 120
+    '>'          shift, and go to state 121
+    '+'          shift, and go to state 122
+    '-'          shift, and go to state 123
+    '*'          shift, and go to state 124
+    '/'          shift, and go to state 125
     ';'          shift, and go to state 142
 
 
@@ -1370,9 +1370,9 @@ State 104
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 143
@@ -1390,9 +1390,9 @@ State 105
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 144
@@ -1456,20 +1456,14 @@ State 110
    54    | Exp . '-' Exp
    55    | Exp . '*' Exp
    56    | Exp . '/' Exp
-   59    | '+' Exp .
+   57    | '!' Exp .
 
-    AND          shift, and go to state 114
-    OR           shift, and go to state 115
-    LESSTHANEQ   shift, and go to state 116
-    GREATTHANEQ  shift, and go to state 117
-    EQ           shift, and go to state 118
-    NOTEQ        shift, and go to state 119
-    '*'          shift, and go to state 122
-    '/'          shift, and go to state 123
-    '<'          shift, and go to state 124
-    '>'          shift, and go to state 125
+    '+'  shift, and go to state 122
+    '-'  shift, and go to state 123
+    '*'  shift, and go to state 124
+    '/'  shift, and go to state 125
 
-    $default  reduce using rule 59 (Exp)
+    $default  reduce using rule 57 (Exp)
 
 
 State 111
@@ -1486,20 +1480,12 @@ State 111
    54    | Exp . '-' Exp
    55    | Exp . '*' Exp
    56    | Exp . '/' Exp
-   58    | '-' Exp .
+   59    | '+' Exp .
 
-    AND          shift, and go to state 114
-    OR           shift, and go to state 115
-    LESSTHANEQ   shift, and go to state 116
-    GREATTHANEQ  shift, and go to state 117
-    EQ           shift, and go to state 118
-    NOTEQ        shift, and go to state 119
-    '*'          shift, and go to state 122
-    '/'          shift, and go to state 123
-    '<'          shift, and go to state 124
-    '>'          shift, and go to state 125
+    '*'  shift, and go to state 124
+    '/'  shift, and go to state 125
 
-    $default  reduce using rule 58 (Exp)
+    $default  reduce using rule 59 (Exp)
 
 
 State 112
@@ -1516,9 +1502,12 @@ State 112
    54    | Exp . '-' Exp
    55    | Exp . '*' Exp
    56    | Exp . '/' Exp
-   57    | '!' Exp .
+   58    | '-' Exp .
 
-    $default  reduce using rule 57 (Exp)
+    '*'  shift, and go to state 124
+    '/'  shift, and go to state 125
+
+    $default  reduce using rule 58 (Exp)
 
 
 State 113
@@ -1543,12 +1532,12 @@ State 113
     GREATTHANEQ  shift, and go to state 117
     EQ           shift, and go to state 118
     NOTEQ        shift, and go to state 119
-    '+'          shift, and go to state 120
-    '-'          shift, and go to state 121
-    '*'          shift, and go to state 122
-    '/'          shift, and go to state 123
-    '<'          shift, and go to state 124
-    '>'          shift, and go to state 125
+    '<'          shift, and go to state 120
+    '>'          shift, and go to state 121
+    '+'          shift, and go to state 122
+    '-'          shift, and go to state 123
+    '*'          shift, and go to state 124
+    '/'          shift, and go to state 125
     ')'          shift, and go to state 150
 
 
@@ -1562,9 +1551,9 @@ State 114
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 151
@@ -1582,9 +1571,9 @@ State 115
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 152
@@ -1602,9 +1591,9 @@ State 116
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 153
@@ -1622,9 +1611,9 @@ State 117
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 154
@@ -1642,9 +1631,9 @@ State 118
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 155
@@ -1662,9 +1651,9 @@ State 119
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 156
@@ -1674,7 +1663,7 @@ State 119
 
 State 120
 
-   53 Exp: Exp '+' . Exp
+   51 Exp: Exp '<' . Exp
 
     id              shift, and go to state 77
     INTEGERLITERAL  shift, and go to state 78
@@ -1682,9 +1671,9 @@ State 120
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 157
@@ -1694,7 +1683,7 @@ State 120
 
 State 121
 
-   54 Exp: Exp '-' . Exp
+   52 Exp: Exp '>' . Exp
 
     id              shift, and go to state 77
     INTEGERLITERAL  shift, and go to state 78
@@ -1702,9 +1691,9 @@ State 121
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 158
@@ -1714,7 +1703,7 @@ State 121
 
 State 122
 
-   55 Exp: Exp '*' . Exp
+   53 Exp: Exp '+' . Exp
 
     id              shift, and go to state 77
     INTEGERLITERAL  shift, and go to state 78
@@ -1722,9 +1711,9 @@ State 122
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 159
@@ -1734,7 +1723,7 @@ State 122
 
 State 123
 
-   56 Exp: Exp '/' . Exp
+   54 Exp: Exp '-' . Exp
 
     id              shift, and go to state 77
     INTEGERLITERAL  shift, and go to state 78
@@ -1742,9 +1731,9 @@ State 123
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 160
@@ -1754,7 +1743,7 @@ State 123
 
 State 124
 
-   51 Exp: Exp '<' . Exp
+   55 Exp: Exp '*' . Exp
 
     id              shift, and go to state 77
     INTEGERLITERAL  shift, and go to state 78
@@ -1762,9 +1751,9 @@ State 124
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 161
@@ -1774,7 +1763,7 @@ State 124
 
 State 125
 
-   52 Exp: Exp '>' . Exp
+   56 Exp: Exp '/' . Exp
 
     id              shift, and go to state 77
     INTEGERLITERAL  shift, and go to state 78
@@ -1782,9 +1771,9 @@ State 125
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 162
@@ -1828,12 +1817,12 @@ State 128
     GREATTHANEQ  shift, and go to state 117
     EQ           shift, and go to state 118
     NOTEQ        shift, and go to state 119
-    '+'          shift, and go to state 120
-    '-'          shift, and go to state 121
-    '*'          shift, and go to state 122
-    '/'          shift, and go to state 123
-    '<'          shift, and go to state 124
-    '>'          shift, and go to state 125
+    '<'          shift, and go to state 120
+    '>'          shift, and go to state 121
+    '+'          shift, and go to state 122
+    '-'          shift, and go to state 123
+    '*'          shift, and go to state 124
+    '/'          shift, and go to state 125
     ')'          shift, and go to state 164
 
 
@@ -1859,12 +1848,12 @@ State 129
     GREATTHANEQ  shift, and go to state 117
     EQ           shift, and go to state 118
     NOTEQ        shift, and go to state 119
-    '+'          shift, and go to state 120
-    '-'          shift, and go to state 121
-    '*'          shift, and go to state 122
-    '/'          shift, and go to state 123
-    '<'          shift, and go to state 124
-    '>'          shift, and go to state 125
+    '<'          shift, and go to state 120
+    '>'          shift, and go to state 121
+    '+'          shift, and go to state 122
+    '-'          shift, and go to state 123
+    '*'          shift, and go to state 124
+    '/'          shift, and go to state 125
     ')'          shift, and go to state 165
 
 
@@ -1897,12 +1886,12 @@ State 131
     GREATTHANEQ  shift, and go to state 117
     EQ           shift, and go to state 118
     NOTEQ        shift, and go to state 119
-    '+'          shift, and go to state 120
-    '-'          shift, and go to state 121
-    '*'          shift, and go to state 122
-    '/'          shift, and go to state 123
-    '<'          shift, and go to state 124
-    '>'          shift, and go to state 125
+    '<'          shift, and go to state 120
+    '>'          shift, and go to state 121
+    '+'          shift, and go to state 122
+    '-'          shift, and go to state 123
+    '*'          shift, and go to state 124
+    '/'          shift, and go to state 125
     ')'          shift, and go to state 167
 
 
@@ -1935,12 +1924,12 @@ State 133
     GREATTHANEQ  shift, and go to state 117
     EQ           shift, and go to state 118
     NOTEQ        shift, and go to state 119
-    '+'          shift, and go to state 120
-    '-'          shift, and go to state 121
-    '*'          shift, and go to state 122
-    '/'          shift, and go to state 123
-    '<'          shift, and go to state 124
-    '>'          shift, and go to state 125
+    '<'          shift, and go to state 120
+    '>'          shift, and go to state 121
+    '+'          shift, and go to state 122
+    '-'          shift, and go to state 123
+    '*'          shift, and go to state 124
+    '/'          shift, and go to state 125
     ')'          shift, and go to state 169
 
 
@@ -1976,9 +1965,9 @@ State 137
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
     ']'             shift, and go to state 39
 
@@ -2010,12 +1999,12 @@ State 138
     GREATTHANEQ  shift, and go to state 117
     EQ           shift, and go to state 118
     NOTEQ        shift, and go to state 119
-    '+'          shift, and go to state 120
-    '-'          shift, and go to state 121
-    '*'          shift, and go to state 122
-    '/'          shift, and go to state 123
-    '<'          shift, and go to state 124
-    '>'          shift, and go to state 125
+    '<'          shift, and go to state 120
+    '>'          shift, and go to state 121
+    '+'          shift, and go to state 122
+    '-'          shift, and go to state 123
+    '*'          shift, and go to state 124
+    '/'          shift, and go to state 125
     ';'          shift, and go to state 170
 
 
@@ -2030,9 +2019,9 @@ State 139
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 171
@@ -2083,12 +2072,12 @@ State 143
     GREATTHANEQ  shift, and go to state 117
     EQ           shift, and go to state 118
     NOTEQ        shift, and go to state 119
-    '+'          shift, and go to state 120
-    '-'          shift, and go to state 121
-    '*'          shift, and go to state 122
-    '/'          shift, and go to state 123
-    '<'          shift, and go to state 124
-    '>'          shift, and go to state 125
+    '<'          shift, and go to state 120
+    '>'          shift, and go to state 121
+    '+'          shift, and go to state 122
+    '-'          shift, and go to state 123
+    '*'          shift, and go to state 124
+    '/'          shift, and go to state 125
     ']'          shift, and go to state 172
 
 
@@ -2114,12 +2103,12 @@ State 144
     GREATTHANEQ  shift, and go to state 117
     EQ           shift, and go to state 118
     NOTEQ        shift, and go to state 119
-    '+'          shift, and go to state 120
-    '-'          shift, and go to state 121
-    '*'          shift, and go to state 122
-    '/'          shift, and go to state 123
-    '<'          shift, and go to state 124
-    '>'          shift, and go to state 125
+    '<'          shift, and go to state 120
+    '>'          shift, and go to state 121
+    '+'          shift, and go to state 122
+    '-'          shift, and go to state 123
+    '*'          shift, and go to state 124
+    '/'          shift, and go to state 125
     ';'          shift, and go to state 173
 
 
@@ -2189,6 +2178,10 @@ State 151
 
     EQ     shift, and go to state 118
     NOTEQ  shift, and go to state 119
+    '+'    shift, and go to state 122
+    '-'    shift, and go to state 123
+    '*'    shift, and go to state 124
+    '/'    shift, and go to state 125
 
     $default  reduce using rule 45 (Exp)
 
@@ -2211,6 +2204,10 @@ State 152
 
     EQ     shift, and go to state 118
     NOTEQ  shift, and go to state 119
+    '+'    shift, and go to state 122
+    '-'    shift, and go to state 123
+    '*'    shift, and go to state 124
+    '/'    shift, and go to state 125
 
     $default  reduce using rule 46 (Exp)
 
@@ -2235,6 +2232,10 @@ State 153
     OR     shift, and go to state 115
     EQ     shift, and go to state 118
     NOTEQ  shift, and go to state 119
+    '+'    shift, and go to state 122
+    '-'    shift, and go to state 123
+    '*'    shift, and go to state 124
+    '/'    shift, and go to state 125
 
     $default  reduce using rule 49 (Exp)
 
@@ -2259,6 +2260,10 @@ State 154
     OR     shift, and go to state 115
     EQ     shift, and go to state 118
     NOTEQ  shift, and go to state 119
+    '+'    shift, and go to state 122
+    '-'    shift, and go to state 123
+    '*'    shift, and go to state 124
+    '/'    shift, and go to state 125
 
     $default  reduce using rule 50 (Exp)
 
@@ -2279,6 +2284,11 @@ State 155
    55    | Exp . '*' Exp
    56    | Exp . '/' Exp
 
+    '+'  shift, and go to state 122
+    '-'  shift, and go to state 123
+    '*'  shift, and go to state 124
+    '/'  shift, and go to state 125
+
     $default  reduce using rule 47 (Exp)
 
 
@@ -2298,128 +2308,16 @@ State 156
    55    | Exp . '*' Exp
    56    | Exp . '/' Exp
 
-    EQ  shift, and go to state 118
+    EQ   shift, and go to state 118
+    '+'  shift, and go to state 122
+    '-'  shift, and go to state 123
+    '*'  shift, and go to state 124
+    '/'  shift, and go to state 125
 
     $default  reduce using rule 48 (Exp)
 
 
 State 157
-
-   45 Exp: Exp . AND Exp
-   46    | Exp . OR Exp
-   47    | Exp . EQ Exp
-   48    | Exp . NOTEQ Exp
-   49    | Exp . LESSTHANEQ Exp
-   50    | Exp . GREATTHANEQ Exp
-   51    | Exp . '<' Exp
-   52    | Exp . '>' Exp
-   53    | Exp . '+' Exp
-   53    | Exp '+' Exp .
-   54    | Exp . '-' Exp
-   55    | Exp . '*' Exp
-   56    | Exp . '/' Exp
-
-    AND          shift, and go to state 114
-    OR           shift, and go to state 115
-    LESSTHANEQ   shift, and go to state 116
-    GREATTHANEQ  shift, and go to state 117
-    EQ           shift, and go to state 118
-    NOTEQ        shift, and go to state 119
-    '*'          shift, and go to state 122
-    '/'          shift, and go to state 123
-    '<'          shift, and go to state 124
-    '>'          shift, and go to state 125
-
-    $default  reduce using rule 53 (Exp)
-
-
-State 158
-
-   45 Exp: Exp . AND Exp
-   46    | Exp . OR Exp
-   47    | Exp . EQ Exp
-   48    | Exp . NOTEQ Exp
-   49    | Exp . LESSTHANEQ Exp
-   50    | Exp . GREATTHANEQ Exp
-   51    | Exp . '<' Exp
-   52    | Exp . '>' Exp
-   53    | Exp . '+' Exp
-   54    | Exp . '-' Exp
-   54    | Exp '-' Exp .
-   55    | Exp . '*' Exp
-   56    | Exp . '/' Exp
-
-    AND          shift, and go to state 114
-    OR           shift, and go to state 115
-    LESSTHANEQ   shift, and go to state 116
-    GREATTHANEQ  shift, and go to state 117
-    EQ           shift, and go to state 118
-    NOTEQ        shift, and go to state 119
-    '*'          shift, and go to state 122
-    '/'          shift, and go to state 123
-    '<'          shift, and go to state 124
-    '>'          shift, and go to state 125
-
-    $default  reduce using rule 54 (Exp)
-
-
-State 159
-
-   45 Exp: Exp . AND Exp
-   46    | Exp . OR Exp
-   47    | Exp . EQ Exp
-   48    | Exp . NOTEQ Exp
-   49    | Exp . LESSTHANEQ Exp
-   50    | Exp . GREATTHANEQ Exp
-   51    | Exp . '<' Exp
-   52    | Exp . '>' Exp
-   53    | Exp . '+' Exp
-   54    | Exp . '-' Exp
-   55    | Exp . '*' Exp
-   55    | Exp '*' Exp .
-   56    | Exp . '/' Exp
-
-    AND          shift, and go to state 114
-    OR           shift, and go to state 115
-    LESSTHANEQ   shift, and go to state 116
-    GREATTHANEQ  shift, and go to state 117
-    EQ           shift, and go to state 118
-    NOTEQ        shift, and go to state 119
-    '<'          shift, and go to state 124
-    '>'          shift, and go to state 125
-
-    $default  reduce using rule 55 (Exp)
-
-
-State 160
-
-   45 Exp: Exp . AND Exp
-   46    | Exp . OR Exp
-   47    | Exp . EQ Exp
-   48    | Exp . NOTEQ Exp
-   49    | Exp . LESSTHANEQ Exp
-   50    | Exp . GREATTHANEQ Exp
-   51    | Exp . '<' Exp
-   52    | Exp . '>' Exp
-   53    | Exp . '+' Exp
-   54    | Exp . '-' Exp
-   55    | Exp . '*' Exp
-   56    | Exp . '/' Exp
-   56    | Exp '/' Exp .
-
-    AND          shift, and go to state 114
-    OR           shift, and go to state 115
-    LESSTHANEQ   shift, and go to state 116
-    GREATTHANEQ  shift, and go to state 117
-    EQ           shift, and go to state 118
-    NOTEQ        shift, and go to state 119
-    '<'          shift, and go to state 124
-    '>'          shift, and go to state 125
-
-    $default  reduce using rule 56 (Exp)
-
-
-State 161
 
    45 Exp: Exp . AND Exp
    46    | Exp . OR Exp
@@ -2441,11 +2339,15 @@ State 161
     GREATTHANEQ  shift, and go to state 117
     EQ           shift, and go to state 118
     NOTEQ        shift, and go to state 119
+    '+'          shift, and go to state 122
+    '-'          shift, and go to state 123
+    '*'          shift, and go to state 124
+    '/'          shift, and go to state 125
 
     $default  reduce using rule 51 (Exp)
 
 
-State 162
+State 158
 
    45 Exp: Exp . AND Exp
    46    | Exp . OR Exp
@@ -2467,8 +2369,94 @@ State 162
     GREATTHANEQ  shift, and go to state 117
     EQ           shift, and go to state 118
     NOTEQ        shift, and go to state 119
+    '+'          shift, and go to state 122
+    '-'          shift, and go to state 123
+    '*'          shift, and go to state 124
+    '/'          shift, and go to state 125
 
     $default  reduce using rule 52 (Exp)
+
+
+State 159
+
+   45 Exp: Exp . AND Exp
+   46    | Exp . OR Exp
+   47    | Exp . EQ Exp
+   48    | Exp . NOTEQ Exp
+   49    | Exp . LESSTHANEQ Exp
+   50    | Exp . GREATTHANEQ Exp
+   51    | Exp . '<' Exp
+   52    | Exp . '>' Exp
+   53    | Exp . '+' Exp
+   53    | Exp '+' Exp .
+   54    | Exp . '-' Exp
+   55    | Exp . '*' Exp
+   56    | Exp . '/' Exp
+
+    '*'  shift, and go to state 124
+    '/'  shift, and go to state 125
+
+    $default  reduce using rule 53 (Exp)
+
+
+State 160
+
+   45 Exp: Exp . AND Exp
+   46    | Exp . OR Exp
+   47    | Exp . EQ Exp
+   48    | Exp . NOTEQ Exp
+   49    | Exp . LESSTHANEQ Exp
+   50    | Exp . GREATTHANEQ Exp
+   51    | Exp . '<' Exp
+   52    | Exp . '>' Exp
+   53    | Exp . '+' Exp
+   54    | Exp . '-' Exp
+   54    | Exp '-' Exp .
+   55    | Exp . '*' Exp
+   56    | Exp . '/' Exp
+
+    '*'  shift, and go to state 124
+    '/'  shift, and go to state 125
+
+    $default  reduce using rule 54 (Exp)
+
+
+State 161
+
+   45 Exp: Exp . AND Exp
+   46    | Exp . OR Exp
+   47    | Exp . EQ Exp
+   48    | Exp . NOTEQ Exp
+   49    | Exp . LESSTHANEQ Exp
+   50    | Exp . GREATTHANEQ Exp
+   51    | Exp . '<' Exp
+   52    | Exp . '>' Exp
+   53    | Exp . '+' Exp
+   54    | Exp . '-' Exp
+   55    | Exp . '*' Exp
+   55    | Exp '*' Exp .
+   56    | Exp . '/' Exp
+
+    $default  reduce using rule 55 (Exp)
+
+
+State 162
+
+   45 Exp: Exp . AND Exp
+   46    | Exp . OR Exp
+   47    | Exp . EQ Exp
+   48    | Exp . NOTEQ Exp
+   49    | Exp . LESSTHANEQ Exp
+   50    | Exp . GREATTHANEQ Exp
+   51    | Exp . '<' Exp
+   52    | Exp . '>' Exp
+   53    | Exp . '+' Exp
+   54    | Exp . '-' Exp
+   55    | Exp . '*' Exp
+   56    | Exp . '/' Exp
+   56    | Exp '/' Exp .
+
+    $default  reduce using rule 56 (Exp)
 
 
 State 163
@@ -2569,12 +2557,12 @@ State 171
     GREATTHANEQ  shift, and go to state 117
     EQ           shift, and go to state 118
     NOTEQ        shift, and go to state 119
-    '+'          shift, and go to state 120
-    '-'          shift, and go to state 121
-    '*'          shift, and go to state 122
-    '/'          shift, and go to state 123
-    '<'          shift, and go to state 124
-    '>'          shift, and go to state 125
+    '<'          shift, and go to state 120
+    '>'          shift, and go to state 121
+    '+'          shift, and go to state 122
+    '-'          shift, and go to state 123
+    '*'          shift, and go to state 124
+    '/'          shift, and go to state 125
     ';'          shift, and go to state 185
 
 
@@ -2602,9 +2590,9 @@ State 174
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     $default  reduce using rule 78 (ExpList)
@@ -2641,9 +2629,9 @@ State 177
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     $default  reduce using rule 78 (ExpList)
@@ -2735,12 +2723,12 @@ State 186
     GREATTHANEQ  shift, and go to state 117
     EQ           shift, and go to state 118
     NOTEQ        shift, and go to state 119
-    '+'          shift, and go to state 120
-    '-'          shift, and go to state 121
-    '*'          shift, and go to state 122
-    '/'          shift, and go to state 123
-    '<'          shift, and go to state 124
-    '>'          shift, and go to state 125
+    '<'          shift, and go to state 120
+    '>'          shift, and go to state 121
+    '+'          shift, and go to state 122
+    '-'          shift, and go to state 123
+    '*'          shift, and go to state 124
+    '/'          shift, and go to state 125
 
     $default  reduce using rule 80 (ExpRestList)
 
@@ -2826,9 +2814,9 @@ State 195
     FALSE           shift, and go to state 80
     THIS            shift, and go to state 81
     NEW             shift, and go to state 82
-    '+'             shift, and go to state 83
-    '-'             shift, and go to state 84
-    '!'             shift, and go to state 85
+    '!'             shift, and go to state 83
+    '+'             shift, and go to state 84
+    '-'             shift, and go to state 85
     '('             shift, and go to state 86
 
     Exp          go to state 197
@@ -2865,11 +2853,11 @@ State 197
     GREATTHANEQ  shift, and go to state 117
     EQ           shift, and go to state 118
     NOTEQ        shift, and go to state 119
-    '+'          shift, and go to state 120
-    '-'          shift, and go to state 121
-    '*'          shift, and go to state 122
-    '/'          shift, and go to state 123
-    '<'          shift, and go to state 124
-    '>'          shift, and go to state 125
+    '<'          shift, and go to state 120
+    '>'          shift, and go to state 121
+    '+'          shift, and go to state 122
+    '-'          shift, and go to state 123
+    '*'          shift, and go to state 124
+    '/'          shift, and go to state 125
 
     $default  reduce using rule 81 (ExpRest)

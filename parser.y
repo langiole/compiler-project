@@ -23,14 +23,15 @@
 
 %type<node> Program MainClass ClassDeclList ClassDecl id Statement VarDeclList VarDecl StatementList MethodDeclList TypePrime MethodDecl Type FormalList Exp FormalRestList FormalRest PrimType PrimTypePrime STRINGLITERAL Index INTEGERLITERAL Object ExpList ObjectPrime ExpRestList ExpRest
 
-%left '+' '-'
-%left '*' '/'
+
 %left '<' '>'
 %left LESSTHANEQ GREATTHANEQ
 %left AND OR
 %left NOTEQ
 %left EQ
 %left '!'
+%left '+' '-'
+%left '*' '/'
 %%
 
 Program 	
