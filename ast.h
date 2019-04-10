@@ -109,6 +109,8 @@ typedef struct StringLiteral StringLiteral;
 typedef struct TextSection TextSection;
 typedef struct StringLiteralList StringLiteralList;
 typedef struct DataSection DataSection;
+typedef struct TempVar TempVar;
+typedef struct TempVarList TempVarList;
 
 void initAST();
 
@@ -123,25 +125,10 @@ AST_Node * mknode5(int mode, AST_Node * n1, AST_Node * n2, AST_Node * n3, AST_No
 AST_Node * mknode6(int mode, AST_Node * n1, AST_Node * n2, AST_Node * n3, AST_Node * n4, AST_Node * n5, AST_Node * n6);
 
 TextSection * text;
-DataSection * data;
 
 struct StringLiteralList {
 	StringLiteral * head;
 	StringLiteral * tail;
-};
-
-struct TempVarList {
-	TempVar * head;
-	TempVar * tail;
-}
-
-struct TempVar {
-	int value;
-	int index;
-}
-
-struct DataSection {
-	TempVarList * tl;
 };
 
 struct TextSection {
@@ -201,7 +188,6 @@ struct Exp {
 		Call * c;
 	};
 	Type * type;
-	TempVar * t;
 	Exp * next;
 	Exp * prev;
 	AST_Node * n;

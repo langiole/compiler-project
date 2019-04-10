@@ -2,65 +2,91 @@
 #include <stdio.h>
 #include "y.tab.h"
 
-void push1(FILE * f) { fprintf(f, "\tpush\t{lr}\n"); }
-void pop1(FILE * f) { fprintf(f, "\tpop\t{pc}\n"); }
+FILE * f;
 
-void generateBinaryOp(Exp * e, FILE * f) {
+void generateExp(Exp * e);
 
-	generateExp(e->bo->e1, f);
-	generateExp(e->bo->e2, f);
+void push1(const char * v1) { fprintf(f, "\tpush\t{%s}\n", v1); }
+void pop1(const char * v1) { fprintf(f, "\tpop\t{%s}\n", v1); }
+void ldr(const char * reg, const char * adr) { fprintf(f, "\tldr\t%s, %s\n", reg, adr); }
+void ldr_str(const char * reg, int index) { fprintf(f, "\tldr\t%s, =str%d\n", reg, index); }
+void add(const char * v1, const char * v2, const char * v3) { fprintf(f, "\tadd\t%s, %s, %s\n", v1, v2, v3); }
+void sub(const char * v1, const char * v2, const char * v3) { fprintf(f, "\tsub\t%s, %s, %s\n", v1, v2, v3); }
+void mul(const char * v1, const char * v2, const char * v3) { fprintf(f, "\tmul\t%s, %s, %s\n", v1, v2, v3); }
+void bl(const char * adr) { fprintf(f, "\tbl\t%s\n", adr); }
+void mov_imm(const char * reg, int value) { fprintf(f, "\tmov\t%s, #%d\n", reg, value); }
 
-	TempVar * t1 = e->bo->e1->t;
-	TempVar * t2 = e->bo->e2->t;
+void generateIntegerLiteral(Exp * e) {
+
+}
+
+void generateBinaryOp(Exp * e) {
+
+	generateExp(e->bo->e1);
+	push1("r0");
+	generateExp(e->bo->e2);
+	pop1("r1");
 
 	switch (e->bo->op) {
 	case PLUS:
-		e->t = t1->value + t2->value;
+		add("r0", "r1", "r0");
+		break;
+	case MINUS:
+		sub("r0", "r1", "r0");
+		break;
+	case TIMES:
+		mul("r0", "r1", "r0");
 		break;
 	}
 }
 
-void generateExp(Exp * e, FILE * f) {
+void generateExp(Exp * e) {
 	switch (e->mode) {
 	case BINARYOP:
-		generateBinaryOp(e, f);
+		generateBinaryOp(e);
+		break;
+	case INTEGERLITERAL:
+		mov_imm("r0", e->il->value);
+		break;
+	case PAREN:
+		generateExp(e->pe->e);
 		break;
 	}
 }
 
-void generatePrint(Print * p, FILE * f) {
+void generatePrint(Print * p) {
 	switch (p->mode) {
 	case EXP:
-		generateExp(p->e, f);
-		fprintf(f, "\tldr\tr1, =t%d\n", p->e->t->index);
-		fprintf(f, "\tldr\tr0, =int_println\n");
+		generateExp(p->e);
+		add("r1", "r0", "#0");			// load r1 with r0
+		ldr("r0", "=int_println");		// load r0 with printf format
 		break;
 	case STRINGLITERAL:
 		if (p->newline) {
-			fprintf(f, "\tldr\tr1, =str%d\n", p->sl->index);
-			fprintf(f, "\tldr\tr0, =str_println\n");
+			ldr_str("r1", p->sl->index);	// load r1 with sl
+			ldr("r0", "=str_println");	// load r0 with printf format
 		} else {
-			fprintf(f, "\tldr\tr0, =str%d\n", p->sl->index);
+			ldr_str("r0", p->sl->index);	// load r0 with sl
 		}
 		break;
 	}
-	fprintf(f, "\tbl\tprintf\n");
+	bl("printf");
 }
 
-void generateStatement(Statement * s, FILE * f) {
+void generateStatement(Statement * s) {
 	switch (s->mode) {
 	case BLOCK:
 	{
 		Statement * curr = s->b->sl->head;
 		while (curr != NULL)
 		{
-			generateStatement(curr, f);
+			generateStatement(curr);
 			curr = curr->next;
 		}
 		break;
 	}
 	case PRINT:
-		generatePrint(s->p, f);
+		generatePrint(s->p);
 		break;
 	}
 }
@@ -72,7 +98,7 @@ void generateCode(char * prog_name, AST_Node * root) {
 	*(++dot) = 's';
 	*(++dot) = '\0';
 
-	FILE * f = fopen(prog_name, "w+");
+	f = fopen(prog_name, "w+");
 
 	// add .text section
 	fprintf(f, ".section\t.text\n");
@@ -92,12 +118,12 @@ void generateCode(char * prog_name, AST_Node * root) {
 	// generate main
 	fprintf(f, "\n.global main\n");
 	fprintf(f, "main:\n");
-	push1(f);
+	push1("lr");
 
 	// continue main generation
-	generateStatement(root->program->m->s, f);
+	generateStatement(root->program->m->s);
 
 	// end main
-	pop1(f);
+	pop1("pc");
 }
 

@@ -2,8 +2,8 @@
 class array {
     public static void main(String [] args) {
     {
-        System.out.print("Sort successful");
-        System.out.println("Sort failed");
+    	// 33
+        System.out.print(4*(2+7)-3);
     }
     }
 }
