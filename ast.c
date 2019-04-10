@@ -5,6 +5,11 @@
 
 extern int yylineno;
 
+void initAST() {
+	text = malloc(sizeof(TextSection));
+	text->sl = malloc(sizeof(StringLiteralList));;
+}
+
 AST_Node * mkleaf(int mode, char * ptr) {
 	switch (mode) {
 	case IDENTIFIER:
@@ -31,6 +36,18 @@ AST_Node * mkleaf(int mode, char * ptr) {
 
 		node->mode = STRINGLITERAL;
 		node->stringliteral = sl;
+
+		if (text->sl->head == NULL)
+		{ 
+			text->sl->head = sl;
+			sl->index = 1;
+		}
+		else 
+		{ 
+			text->sl->tail->next = sl;
+			sl->index = text->sl->tail->index + 1;
+		}
+		text->sl->tail = sl;
 
 		return node;
 	}
@@ -179,6 +196,7 @@ AST_Node * mknode0(int mode) {
 		AST_Node * node = malloc(sizeof(AST_Node));
 
 		vl->n = node;
+		vl->count = 0;
 
 		node->mode = VARDECLLIST;
 		node->vardecllist = vl;
@@ -203,6 +221,7 @@ AST_Node * mknode0(int mode) {
 		AST_Node * node = malloc(sizeof(AST_Node));
 
 		fl->n = node;
+		fl->count = 0;
 
 		node->mode = FORMALLIST;
 		node->formallist = fl;
@@ -216,6 +235,7 @@ AST_Node * mknode0(int mode) {
 		AST_Node * node = malloc(sizeof(AST_Node));
 
 		fl->n = node;
+		fl->count = 0;
 
 		node->mode = FORMALLIST;
 		node->formallist = fl;
@@ -671,6 +691,7 @@ AST_Node * mknode2(int mode, AST_Node * n1, AST_Node * n2) {
 			// set tail
 			n1->vardecllist->tail = n2->vardecl;
 		}
+		n1->vardecllist->count++;
 		return n1;
 	}
 	case VARDECL:
@@ -718,7 +739,7 @@ AST_Node * mknode2(int mode, AST_Node * n1, AST_Node * n2) {
 			// set tail
 			n1->formallist->tail = n2->formalrest;
 		}
-
+		n1->formallist->count++;
 		return n1;
 	}
 	case FORMALREST:
@@ -981,7 +1002,7 @@ AST_Node * mknode3(int mode, AST_Node * n1, AST_Node * n2, AST_Node * n3) {
 			// set head
 			n3->formallist->head = fr;
 		}
-
+		n3->formallist->count++;
 		return n3;
 	}
 	case IF:

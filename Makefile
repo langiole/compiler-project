@@ -1,5 +1,5 @@
 typechecker:	y.tab.c lex.yy.c
-		gcc -g y.tab.c lex.yy.c ast.c dfs.c typecheck.c interpreter.c -o typechecker
+		gcc -g y.tab.c lex.yy.c ast.c dfs.c typecheck.c generator.c -o typechecker
 
 y.tab.c:	parser.y
 		yacc -d --verbose parser.y

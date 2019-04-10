@@ -185,6 +185,7 @@ ExpRest 	: ',' Exp 		{ $$ = $2; }
 
 %%
 #include "dfs.h"
+#include "generator.h"
 
 void yyerror(char *s) {
 	fprintf(stderr, "Syntax errors in %d\n", yylineno);
@@ -196,10 +197,11 @@ int main(int argc, char **argv) {
 		yyin = fopen(argv[0], "r");
 	else
 		yyin = stdin;
+	initAST();
 	yyparse();
 	TYPECHECK = 1;
 	dfs(root);
 	TYPECHECK = 0;
-	if (!TYPEERR) { dfs(root); }
+	generateCode(argv[0], root);
 	return 0;
 }

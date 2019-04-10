@@ -1,7 +1,6 @@
 #include "y.tab.h"
 #include <stdio.h>
 #include "typecheck.h"
-#include "interpreter.h"
 #include <stdlib.h>
 #include "dfs.h"
 
@@ -73,7 +72,6 @@ void dfs(AST_Node * root) {
 			if (typecheckMethodDecl(root->methoddecl, root->methoddecl->i->n->lineno))
 				TYPEERR = 1;
 		}
-		else { interpretMethodDecl(root->methoddecl); }
 		break;
 	case FORMALLIST:
 	{
@@ -132,14 +130,7 @@ void dfs(AST_Node * root) {
 				dfs(root->statement->i->s1->n);
 				dfs(root->statement->i->s2->n);
 			}
-			else 
-			{ 
-				interpretIf(root->statement->i);
-				 
-				// interpret next statement
-				if (root->statement->next != NULL)
-					dfs(root->statement->next->n);
-			}
+			
 			break;
 		}
 		case WHILE:
@@ -151,14 +142,7 @@ void dfs(AST_Node * root) {
 				// typecheck statement
 				dfs(root->statement->w->s->n);
 			}
-			else 
-			{ 
-				interpretWhile(root->statement->w); 
-
-				// interpret next statement
-				if (root->statement->next != NULL)
-					dfs(root->statement->next->n);
-			}
+			
 			break;
 		}
 		case PRINT:
@@ -168,14 +152,7 @@ void dfs(AST_Node * root) {
 				if (typecheckPrint(root->statement->p, root->lineno))
 					TYPEERR = 1;
 			}
-			else
-			{ 
-				interpretPrint(root->statement->p);
-
-				// interpret next statement
-				if (root->statement->next != NULL)
-					dfs(root->statement->next->n);
-			}
+			
 			break;
 		}
 		case ASSGN:
@@ -185,14 +162,7 @@ void dfs(AST_Node * root) {
 				if (typecheckAssign(root->statement->a, root->lineno))
 					TYPEERR = 1;
 			}
-			else 
-			{ 
-				interpretAssign(root->statement->a); 
-
-				// interpret next statement
-				if (root->statement->next != NULL)
-					dfs(root->statement->next->n);
-			}
+			
 			break;
 		}
 		case ARRASSGN:
@@ -208,7 +178,6 @@ void dfs(AST_Node * root) {
 				if (typecheckReturn(root->statement->e, root->lineno))
 					TYPEERR = 1;
 			}
-			else { interpretReturn(root->statement->e); }
 			break;
 		}
 		break;
@@ -229,7 +198,6 @@ void dfs(AST_Node * root) {
 				if (typecheckBinaryOp(root->exp, root->lineno))
 					TYPEERR = 1;
 			}
-			else { interpretBinaryOp(root->exp); }
 			break;
 		}
 		case UNARYOP:
@@ -239,16 +207,13 @@ void dfs(AST_Node * root) {
 				if (typecheckUnaryOp(root->exp, root->lineno))
 					TYPEERR = 1;
 			}
-			else { interpretUnaryOp(root->exp); }
 			break;
 		}
 		case INTEGERLITERAL:
 			if (TYPECHECK) { typecheckIntegerLiteral(root->exp, root->lineno); }
-			else { interpretIntegerLiteral(root->exp); }
 			break;
 		case BOOLEAN:
 			if (TYPECHECK) { typecheckBoolean(root->exp, root->lineno); }
-			else { interpretBoolean(root->exp); }
 			break;
 		case ARRLOOKUP:
 			if (TYPECHECK) 
@@ -278,13 +243,11 @@ void dfs(AST_Node * root) {
 				if (typecheckObject(root->exp, root->lineno))
 					TYPEERR = 1;
 			}
-			else { interpretObject(root->exp); }
 			break;
 		}
 		case PAREN:
 		{
 			if (TYPECHECK) { typecheckParen(root->exp, root->lineno); }
-			else { interpretParen(root->exp); }
 			break;
 		}
 		case CALL:
@@ -294,7 +257,6 @@ void dfs(AST_Node * root) {
 				if (typecheckCall(root->exp, root->lineno))
 					TYPEERR = 1;
 			}
-			else { interpretCall(root->exp); }
 			break;
 		}
 		}

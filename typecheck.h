@@ -1,10 +1,5 @@
 #include "y.tab.h"
 
-int getDimension(Type * t);
-PrimType * getPrimType(Type * t);
-ClassDecl * findClass(Identifier * i);
-MethodDecl * findMethod(ClassDecl * cd, Identifier * i, ExpList * el);
-int identifiersEqual(Identifier * i1, Identifier * i2);
 int typecheckArrayLookup(Exp * e, int lineno);
 int typecheckArrayAssign(ArrayAssign * aa, int lineno);
 int typecheckCall(Exp * e, int lineno);

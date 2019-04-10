@@ -106,6 +106,13 @@ typedef struct Table Table;
 typedef struct Entry Entry;
 typedef struct IdentifierLength IdentifierLength;
 typedef struct StringLiteral StringLiteral;
+typedef struct TextSection TextSection;
+typedef struct StringLiteralList StringLiteralList;
+typedef struct DataSection DataSection;
+
+void initAST();
+
+AST_Node * mkleaf();
 
 AST_Node * mknode0(int mode);
 AST_Node * mknode1(int mode, AST_Node * n1);
@@ -115,7 +122,31 @@ AST_Node * mknode4(int mode, AST_Node * n1, AST_Node * n2, AST_Node * n3, AST_No
 AST_Node * mknode5(int mode, AST_Node * n1, AST_Node * n2, AST_Node * n3, AST_Node * n4, AST_Node * n5);
 AST_Node * mknode6(int mode, AST_Node * n1, AST_Node * n2, AST_Node * n3, AST_Node * n4, AST_Node * n5, AST_Node * n6);
 
-AST_Node * mkleaf();
+TextSection * text;
+DataSection * data;
+
+struct StringLiteralList {
+	StringLiteral * head;
+	StringLiteral * tail;
+};
+
+struct TempVarList {
+	TempVar * head;
+	TempVar * tail;
+}
+
+struct TempVar {
+	int value;
+	int index;
+}
+
+struct DataSection {
+	TempVarList * tl;
+};
+
+struct TextSection {
+	StringLiteralList * sl;
+};
 
 struct AST_Node {
 	int lineno;
@@ -170,11 +201,7 @@ struct Exp {
 		Call * c;
 	};
 	Type * type;
-	union {
-		int value;
-		int * intArr;
-		ClassDecl * classArr;
-	};
+	TempVar * t;
 	Exp * next;
 	Exp * prev;
 	AST_Node * n;
@@ -265,11 +292,6 @@ struct Index {
 
 struct Identifier {
 	char * name;
-	union {
-		int value;
-		int * intArr;
-		ClassDecl * classArr;
-	};
 	AST_Node * n;
 };
 
@@ -319,6 +341,8 @@ struct While {
 
 struct StringLiteral {
 	char * str;
+	int index;
+	StringLiteral * next;
 	AST_Node * n;
 };
 
@@ -372,6 +396,7 @@ struct FormalRest {
 struct FormalList {
 	FormalRest * head;
 	FormalRest * tail;
+	int count;
 	AST_Node * n;
 };
 
@@ -407,6 +432,7 @@ struct VarDecl {
 struct VarDeclList {
 	VarDecl * head;
 	VarDecl * tail;
+	int count;
 	AST_Node * n;
 };
 
