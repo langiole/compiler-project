@@ -4,47 +4,42 @@
 #include <stdlib.h>
 #include "typecheck.h"
 #include "dfs.h"
-
-PrimType * getPrimType(Type * t) {
-	while (t->mode == ARRAYTYPE) { t = t->at->t; }
-	return t->pt;
-}
-
-char * typeToString(Type * t) {
-	PrimType * pt = getPrimType(t);
-	switch (pt->mode)
-	{
-	case INT:
-		return "int";
-	case BOOLEAN:
-		return "boolean";
-	case IDENTIFIER:
-		return pt->i->name;
-	}
-}
+#include "symtbl.h"
 
 void printUnknownSymbolErr(Identifier * i, int lineno) {
 	fprintf(stderr, "Type Violation in Line %d : cannot find symbol %s\n", lineno, i->name);
 }
 
 void printIncompatibleTypeErr(Type * t, int lineno) {
-	fprintf(stderr, "Type Violation in Line %d : incompatible type: %s\n", lineno, typeToString(t));
+	char * str = typeToString(t);
+	fprintf(stderr, "Type Violation in Line %d : incompatible type: %s\n", lineno, str);
+	free(str);
 }
 
 void printIncompatibleTypeBoolErr(Type * t, int lineno) {
-	fprintf(stderr, "Type Violation in Line %d : incompatible type: %s cannot be converted to boolean\n", lineno, typeToString(t));
+	char * str = typeToString(t);
+	fprintf(stderr, "Type Violation in Line %d : incompatible type: %s cannot be converted to boolean\n", lineno, str);
+	free(str);
 }
 
 void printIncompatibleTypeIntErr(Type * t, int lineno) {
-	fprintf(stderr, "Type Violation in Line %d : incompatible type: %s cannot be converted to int\n", lineno, typeToString(t));
+	char * str = typeToString(t);
+	fprintf(stderr, "Type Violation in Line %d : incompatible type: %s cannot be converted to int\n", lineno, str);
+	free(str);
 }
 
 void printCannotDereferenceErr(Type * t, int lineno) {
-	fprintf(stderr, "Type Violation in Line %d : incompatible type: %s cannot be dereferenced\n", lineno, typeToString(t));
+	char * str = typeToString(t);
+	fprintf(stderr, "Type Violation in Line %d : incompatible type: %s cannot be dereferenced\n", lineno, str);
+	free(str);
 }
 
 void printIncompatibleTypesErr(Type * t1, Type * t2, int lineno) {
-	fprintf(stderr, "Type Violation in Line %d : incompatible types: %s cannot be converted to %s\n", lineno, typeToString(t1), typeToString(t2));
+	char * str1 = typeToString(t1);
+	char * str2 = typeToString(t2);
+	fprintf(stderr, "Type Violation in Line %d : incompatible types: %s cannot be converted to %s\n", lineno, str1, str2);
+	free(str1);
+	free(str2);
 }
 
 void printRedefinedVarErr(Identifier * i, int lineno) {
@@ -64,7 +59,9 @@ void printNonStaticVarErr(int lineno) {
 }
 
 void printArrayRequiredErr(Type * t, int lineno) {
-	fprintf(stderr, "Type Violation in Line %d : array required, but %s found\n", lineno, typeToString(t));	
+	char * str = typeToString(t);
+	fprintf(stderr, "Type Violation in Line %d : array required, but %s found\n", lineno, str);
+	free(str);
 }
 
 int typeIsInt(Type * t) {
@@ -77,11 +74,6 @@ int typeIsBoolean(Type * t) {
 	if (t->mode != PRIMTYPE) { return 0; }
 	if (t->pt->mode != BOOLEAN) { return 0; }
 	return 1;
-}
-
-int identifiersEqual(Identifier * i1, Identifier * i2) {
-	if (strcmp(i1->name, i2->name) == 0) { return 1; }
-	else { return 0; }
 }
 
 Identifier * extractID(Type * t) {
@@ -110,17 +102,6 @@ Type * searchFormalList(FormalList * fl, Identifier * i) {
 		if (identifiersEqual(i, curr->i))
 			return curr->t;
 		curr = curr->prev;
-	}
-	return 0;
-}
-
-ClassDecl * findClass(Identifier * i) {
-	ClassDecl * curr = CLASS_DECL_LIST->head;
-	while (curr != NULL) 
-	{
-		if (identifiersEqual(curr->i1, i))
-			return curr;
-		curr = curr->next;
 	}
 	return 0;
 }
@@ -225,31 +206,6 @@ int typecheckIf(If * i, int lineno) {
 	return 1;
 }
 
-int typesEqual(Type * t1, Type * t2) {
-
-	if (t1->mode != t2->mode) { return 0; }
-
-	switch (t1->mode)
-	{
-	case PRIMTYPE:
-		if (t1->pt->mode != t2->pt->mode) { return 0; }
-		else if (t1->pt->mode != IDENTIFIER) { return 1; }
-		else if (identifiersEqual(t1->pt->i, t2->pt->i)) { return 1; }
-		else { return 0; }
-	case ARRAYTYPE:
-		while (t1->mode == ARRAYTYPE)
-		{
-			t1 = t1->at->t;
-			t2 = t2->at->t;
-			if (t1->mode != t2->mode) { return 0; }
-		}
-		if (t1->pt->mode != t2->pt->mode) { return 0; }
-		else if (t1->pt->mode != IDENTIFIER) { return 1; }
-		else if (identifiersEqual(t1->pt->i, t2->pt->i)) { return 1; }
-		else { return 0; }
-	}
-}
-
 int typecheckReturn(Exp * e, int lineno) {
 
 	// typecheck exp + propagate
@@ -282,6 +238,17 @@ int typecheckAssign(Assign * a, int lineno) {
 	if (t2 == NULL) { return 0; }
 	if (typesEqual(t1, t2)) { return 0; }
 
+	if (t2->mode == PRIMTYPE) {
+		if (t2->pt->mode == IDENTIFIER) {
+			ClassDecl * currCd = findClass(t2->pt->i);
+			while (currCd->mode == CLASSDECLEXTENDS) {
+				if (identifiersEqual(t1->pt->i, currCd->i2)) { return 0; }
+				currCd = findClass(currCd->i2);
+			}
+		}
+		
+	}
+
 	printIncompatibleTypesErr(t1, t2, lineno);
 	return 1;
 }
@@ -300,6 +267,9 @@ int formalListsEqual(FormalList * fl1, FormalList * fl2) {
 }
 
 int typecheckMethodDecl(MethodDecl * md, int lineno) {
+
+	// build symtbl
+	buildSymTbl(md->n);
 
 	// set curr method
 	CURR_METHOD = md;
@@ -345,6 +315,9 @@ int typecheckMethodDecl(MethodDecl * md, int lineno) {
 }
 
 int typecheckClassDecl(ClassDecl * cd, int lineno) {
+
+	// build symtbl
+	buildSymTbl(cd->n);
 
 	CURR_CLASS = cd;
 
@@ -446,21 +419,7 @@ int typecheckBoolean(Exp * e, int lineno) {
 	e->type = t;
 }
 
-int argsMatchFormalList(ExpList * el, FormalList * fl) {
-	Exp * currE = el->head;
-	FormalRest * currFr = fl->head;
-	while (currE != NULL || currFr != NULL)
-	{
-		if (currE == NULL || currFr == NULL) { return 0; }
-		if (currE->type == NULL) { return 0; }
-		if (!typesEqual(currE->type, currFr->t)) { return 0; }
-		currE = currE->next;
-		currFr = currFr->next;
-	}
-	return 1;
-}
-
-MethodDecl * findMethod(ClassDecl * cd, Identifier * i, ExpList * el) {
+MethodDecl * findMethodT(ClassDecl * cd, Identifier * i, ExpList * el) {
 	MethodDecl * curr = cd->ml->head;
 	while (curr != NULL)
 	{
@@ -472,10 +431,14 @@ MethodDecl * findMethod(ClassDecl * cd, Identifier * i, ExpList * el) {
 	// search extendedClass if it is found
 	ClassDecl * extendedClass = findClass(cd->i2);
 	if (extendedClass == NULL) { return 0; }
-	return findMethod(extendedClass, i, el);
+	return findMethodT(extendedClass, i, el);
 }
 
 int typecheckCall(Exp * e, int lineno) {
+
+	if (CURR_METHOD != NULL)
+		CURR_METHOD->leaf = 0;
+
 	ClassDecl * cd;
 	Object * o = e->c->o;
 
@@ -554,7 +517,7 @@ int typecheckCall(Exp * e, int lineno) {
 	dfs(e->c->el->n);
 
 	// search for method
-	MethodDecl * md = findMethod(cd, e->c->i, e->c->el);
+	MethodDecl * md = findMethodT(cd, e->c->i, e->c->el);
 
 	if (md == NULL)
 	{
@@ -716,12 +679,6 @@ int typecheckIdentifierLen(Exp * e, int lineno) {
 	e->type = t;
 
 	return 0;
-}
-
-int getDimension(Type * t) {
-	int dim = 0;
-	while (t->mode == ARRAYTYPE) { t = t->at->t; dim++; }
-	return dim;
 }
 
 Type * makeArrayType(PrimType * pt, int dim) {

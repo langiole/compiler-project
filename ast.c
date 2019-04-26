@@ -1,13 +1,170 @@
 #include "y.tab.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "typecheck.h"
+#include <string.h>
 
 extern int yylineno;
 
 void initAST() {
 	text = malloc(sizeof(TextSection));
 	text->sl = malloc(sizeof(StringLiteralList));;
+}
+
+int getDimension(Type * t) {
+	int dim = 0;
+	while (t->mode == ARRAYTYPE) { t = t->at->t; dim++; }
+	return dim;
+}
+
+int identifiersEqual(Identifier * i1, Identifier * i2) {
+	if (strcmp(i1->name, i2->name) == 0) { return 1; }
+	else { return 0; }
+}
+
+PrimType * getPrimType(Type * t) {
+	while (t->mode == ARRAYTYPE) { t = t->at->t; }
+	return t->pt;
+}
+
+char * typeToString(Type * t) {
+	char * str = 0;
+	char * tempStr = 0;
+	int size = 0;
+	while (t->mode == ARRAYTYPE) { 
+		size += 2;
+		tempStr = realloc(tempStr, size * sizeof(char));
+		strcat(tempStr, "[]");
+		t = t->at->t; 
+	}
+	switch (t->pt->mode)
+	{
+	case INT:
+		str = malloc((size + strlen("int") + 1)*sizeof(char));
+		strcpy(str, "int");
+		break;
+	case BOOLEAN:
+		str = malloc((size + strlen("boolean") + 1)*sizeof(char));
+		strcpy(str, "boolean");
+		break;
+	case IDENTIFIER:
+		str = malloc((size + strlen(t->pt->i->name) + 1)*sizeof(char));
+		strcpy(str, t->pt->i->name);
+		break;
+	}
+	if (tempStr != 0) {
+		strcat(str, tempStr);
+		free(tempStr);
+	}
+	return str;
+}
+
+int typesEqual(Type * t1, Type * t2) {
+
+	if (t1->mode != t2->mode) { return 0; }
+
+	switch (t1->mode)
+	{
+	case PRIMTYPE:
+		if (t1->pt->mode != t2->pt->mode) { return 0; }
+		else if (t1->pt->mode != IDENTIFIER) { return 1; }
+		else if (identifiersEqual(t1->pt->i, t2->pt->i)) { return 1; }
+		else { return 0; }
+	case ARRAYTYPE:
+		while (t1->mode == ARRAYTYPE)
+		{
+			t1 = t1->at->t;
+			t2 = t2->at->t;
+			if (t1->mode != t2->mode) { return 0; }
+		}
+		if (t1->pt->mode != t2->pt->mode) { return 0; }
+		else if (t1->pt->mode != IDENTIFIER) { return 1; }
+		else if (identifiersEqual(t1->pt->i, t2->pt->i)) { return 1; }
+		else { return 0; }
+	}
+}
+
+int argsMatchFormalList(ExpList * el, FormalList * fl) {
+	Exp * currE = el->head;
+	FormalRest * currFr = fl->head;
+	while (currE != NULL || currFr != NULL)
+	{
+		if (currE == NULL || currFr == NULL) { return 0; }
+		if (currE->type == NULL) { return 0; }
+		if (!typesEqual(currE->type, currFr->t)) { return 0; }
+		currE = currE->next;
+		currFr = currFr->next;
+	}
+	return 1;
+}
+
+MethodEntry findMethod(Identifier * classId, Identifier * methodId, ExpList * el) {
+	int i = -1;
+	while (1) { 
+		if (strcmp(classId->name, descriptors[++i].i->name) == 0) break; 
+	}
+	int j = -1;
+	while (1) { 
+		if (strcmp(methodId->name, descriptors[i].methods[++j].i->name) == 0
+			&& argsMatchFormalList(el, descriptors[i].methods[j].fl)) return descriptors[i].methods[j];
+	}
+}
+
+void buildClassDescriptors(ClassDeclList * cl) {
+	descriptors = malloc(cl->count * sizeof(ClassDescriptor));
+
+	int i = 0;
+	ClassDecl * currCd = cl->head;
+	while (currCd != NULL) {
+
+		// set id
+		descriptors[i].i = currCd->i1;
+
+		// set size and malloc
+		descriptors[i].size = currCd->ml->count;
+		MethodEntry * methods = malloc(descriptors[i].size * sizeof(MethodEntry));
+
+		int j = 0;
+		MethodDecl * currMd = currCd->ml->head;
+		while (currMd != NULL) {
+			methods[j].i = currMd->i;
+			methods[j].fl = currMd->fl;
+			methods[j++].className = currCd->i1->name;
+			currMd = currMd->next;
+		}
+
+		if (currCd->mode == CLASSDECLEXTENDS) {
+			ClassDecl * extendedCd = findClass(currCd->i2);
+			while(1) {
+				// update size and realloc
+				descriptors[i].size += extendedCd->ml->count;
+				methods = realloc(methods, descriptors[i].size * sizeof(MethodEntry));
+
+				currMd = extendedCd->ml->head;
+				while (currMd != NULL) {
+					methods[j].i = currMd->i;
+					methods[j].fl = currMd->fl;
+					methods[j++].className = extendedCd->i1->name;
+					currMd = currMd->next;
+				}
+
+				if (extendedCd->mode != CLASSDECLEXTENDS) break;
+				extendedCd = findClass(extendedCd->i2);
+			}	
+		}
+		descriptors[i++].methods = methods;
+		currCd = currCd->next;
+	}
+}
+
+ClassDecl * findClass(Identifier * i) {
+	ClassDecl * curr = CLASS_DECL_LIST->head;
+	while (curr != NULL) 
+	{
+		if (strcmp(curr->i1->name, i->name) == 0)
+			return curr;
+		curr = curr->next;
+	}
+	return 0;
 }
 
 AST_Node * mkleaf(int mode, char * ptr) {
@@ -675,6 +832,7 @@ AST_Node * mknode2(int mode, AST_Node * n1, AST_Node * n2) {
 			// set tail
 			n1->classdecllist->tail = n2->classdecl;
 		}
+		n1->classdecllist->count++;
 		return n1;
 	}
 	case VARDECLLIST:
@@ -723,6 +881,7 @@ AST_Node * mknode2(int mode, AST_Node * n1, AST_Node * n2) {
 			// set tail
 			n1->methoddecllist->tail = n2->methoddecl;
 		}
+		n1->methoddecllist->count++;
 		return n1;
 	}
 	case FORMALRESTLIST:
@@ -1109,6 +1268,7 @@ AST_Node * mknode5(int mode, AST_Node * n1, AST_Node * n2, AST_Node * n3, AST_No
 		md->vl = n4->vardecllist;
 		md->sl = sl;
 		md->e = n5->exp;
+		md->leaf = 1;
 		md->n = node;
 
 		node->mode = METHODDECL;
@@ -1141,40 +1301,3 @@ AST_Node * mknode6(int mode, AST_Node * n1, AST_Node * n2, AST_Node * n3, AST_No
 	}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

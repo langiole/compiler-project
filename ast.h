@@ -111,8 +111,24 @@ typedef struct StringLiteralList StringLiteralList;
 typedef struct DataSection DataSection;
 typedef struct TempVar TempVar;
 typedef struct TempVarList TempVarList;
+typedef struct SymTbl SymTbl;
+typedef struct Entry Entry;
+typedef struct Descriptor Descriptor;
+typedef struct DescriptorTbl DescriptorTbl;
+typedef struct ClassDescriptor ClassDescriptor;
+typedef struct MethodEntry MethodEntry;
 
 void initAST();
+ClassDecl * findClass(Identifier * i);
+
+void buildClassDescriptors(ClassDeclList * cl);
+MethodEntry findMethod(Identifier * classId, Identifier * methodId, ExpList * el);
+int argsMatchFormalList(ExpList * el, FormalList * fl);
+char * typeToString(Type * t);
+PrimType * getPrimType(Type * t);
+int typesEqual(Type * t1, Type * t2);
+int identifiersEqual(Identifier * i1, Identifier * i2);
+int getDimension(Type * t);
 
 AST_Node * mkleaf();
 
@@ -125,6 +141,33 @@ AST_Node * mknode5(int mode, AST_Node * n1, AST_Node * n2, AST_Node * n3, AST_No
 AST_Node * mknode6(int mode, AST_Node * n1, AST_Node * n2, AST_Node * n3, AST_Node * n4, AST_Node * n5, AST_Node * n6);
 
 TextSection * text;
+
+ClassDecl * CURR_CLASS;
+MethodDecl * CURR_METHOD;
+ClassDeclList * CLASS_DECL_LIST;
+ClassDescriptor * descriptors;
+
+struct SymTbl {
+	Entry * entries;
+	int size;
+};
+
+struct Entry {
+	Identifier * i;
+	Type * t;
+};
+
+struct ClassDescriptor {
+	Identifier * i;
+	MethodEntry * methods;
+	int size;
+};
+
+struct MethodEntry {
+	Identifier * i;
+	char * className;
+	FormalList * fl;
+};
 
 struct StringLiteralList {
 	StringLiteral * head;
@@ -393,15 +436,15 @@ struct MethodDecl {
 	VarDeclList * vl;
 	StatementList * sl;
 	Exp * e;
-
-	int ret;
-
+	int leaf;
+	SymTbl * tbl;
 	MethodDecl * next;
 	MethodDecl * prev;
 	AST_Node * n;
 };
 
 struct MethodDeclList {
+	int count;
 	MethodDecl * head;
 	MethodDecl * tail;
 	AST_Node * n;
@@ -429,13 +472,14 @@ struct ClassDecl {
 	Identifier * i2;
 	VarDeclList * vl;
 	MethodDeclList * ml;
-
+	SymTbl * tbl;
 	ClassDecl * next;
 	ClassDecl * prev;
 	AST_Node * n;
 };
 
 struct ClassDeclList {
+	int count;
 	ClassDecl * head;
 	ClassDecl * tail;
 	AST_Node * n;
